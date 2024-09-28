@@ -52,7 +52,7 @@ public class LevelMetadata : MonoBehaviour
     IEnumerator SwitchCharacters()
     {
         isSwitching = true;
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.5f);
         if(playerAisActive)
         {
             playerB.SetActive(true);
