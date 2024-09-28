@@ -17,6 +17,12 @@ public class PlatformPlayer : MonoBehaviour, Player
     public GameObject tempPlatform;
 
     public Transform platformPosition;
+    
+    private float pushForce = 15;
+
+    public float platformCooldown = 1f;
+
+    private bool canPlacePlatform = true;
 
 
 
@@ -36,7 +42,7 @@ public class PlatformPlayer : MonoBehaviour, Player
             rb.velocity = new Vector2(rb.velocity.x, jumpHeight);
         }
 
-        if(Input.GetKeyDown(KeyCode.E))
+        if(Input.GetMouseButtonDown(0) && canPlacePlatform)
         {
             CreatePlatform();
         }
@@ -45,11 +51,40 @@ public class PlatformPlayer : MonoBehaviour, Player
     void FixedUpdate()
     {
         float move = Input.GetAxis("Horizontal");
-        rb.velocity = new Vector2(move * horizontalVelocity, rb.velocity.y);
+        if(move != 0) {
+            rb.velocity = new Vector2(move * horizontalVelocity, rb.velocity.y);
+        }
     }
 
     void CreatePlatform()
     {
+        StartCoroutine(doPlatformCooldown());
         Instantiate(tempPlatform, platformPosition.position, Quaternion.identity);
+        PushPlayer();
+    }
+
+    IEnumerator doPlatformCooldown()
+    {
+        canPlacePlatform = false;
+        yield return new WaitForSeconds(0.5f);
+        canPlacePlatform = true;
+
+    }
+
+    void PushPlayer()
+    {
+        // Generate a random X direction (either -1 or 1) for left or right
+        float randomXDirection = Random.Range(-0.25f, 0.25f);
+
+        // Set the Y direction to be positive
+        float yDirection = 0.1f;
+
+        // Create a vector for the force
+        Vector2 pushDirection = new Vector2(randomXDirection, yDirection).normalized;
+        pushDirection.Normalize();
+
+        // Apply force to the player's Rigidbody in that direction
+        rb.velocity = Vector2.zero;
+        rb.AddForce(pushDirection * pushForce, ForceMode2D.Impulse);
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class AttackPlayer : MonoBehaviour
+public class AttackPlayer : MonoBehaviour, Player
 {
     public float horizontalVelocity;
     public float jumpHeight;
@@ -16,6 +16,10 @@ public class AttackPlayer : MonoBehaviour
     public float groundCheckRadius = 0.2f;
 
     public GameObject projectile;
+
+    public float projectileSpeed;
+
+    public Transform firePoint;
 
     void Start() {
         rb = GetComponent<Rigidbody2D>();
@@ -33,7 +37,7 @@ public class AttackPlayer : MonoBehaviour
             rb.velocity = new Vector2(rb.velocity.x, jumpHeight);
         }
 
-        if(Input.GetKeyDown(KeyCode.E))
+        if(Input.GetMouseButtonDown(0))
         {
             ShootProjectile();
         }
@@ -51,6 +55,17 @@ public class AttackPlayer : MonoBehaviour
     {
         GameObject newProjectile = Instantiate(projectile, transform.position, Quaternion.identity);
         Rigidbody2D projectileRb = newProjectile.GetComponent<Rigidbody2D>();
+
+        // Get the mouse position in world space
+        Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        // Calculate the direction from the player to the mouse position
+        Vector2 direction = (mousePosition - transform.position).normalized;
+        direction.Normalize();
+        // .normalized;
+
+        // Set the projectile's velocity based on the direction and speed
+        Debug.Log(direction);
+        projectileRb.velocity = direction * projectileSpeed;
     }
 
     public void Die()

@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class Deadzone : MonoBehaviour
+public class Deadzone : MonoBehaviour, Player
 {
 
 
@@ -19,5 +20,11 @@ public class Deadzone : MonoBehaviour
                 player.Die();
             }
         }
+    }
+
+    public void Die()
+    {
+        Scene currentScene = SceneManager.GetActiveScene(); // Get the current scene
+        SceneManager.LoadScene(currentScene.name); // Reload the current scene
     }
 }
