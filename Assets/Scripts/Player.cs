@@ -4,7 +4,7 @@ using UnityEngine;
 
 
 
-public interface Player
+public interface Player 
 {
  
 }

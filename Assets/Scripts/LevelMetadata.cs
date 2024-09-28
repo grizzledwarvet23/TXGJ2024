@@ -7,35 +7,41 @@ using TMPro;
 public class LevelMetadata : MonoBehaviour
 {
 
-    public Player playerA;
-    public Player playerB;
+    public GameObject playerA;
+    public GameObject playerB;
+
+    private bool playerAisActive = true;
 
     public TextMeshProUGUI timerText;
 
-    public float timerLength = 10.0f;
+    public float timerLength = 5.0f;
+
+    private float currentTimer;
+
     private bool isSwitching = false;
 
     // Start is called before the first frame update
     void Start()
     {
         // lets start 
+        currentTimer = timerLength;
     }
 
     // Update is called once per frame
     void Update()
     {
         if(!isSwitching) {
-            timerLength -= Time.deltaTime;
+            currentTimer -= Time.deltaTime;
 
-            if(timerLength <= 0)
+            if(currentTimer <= 0)
             {
-                timerLength = 10.0f;
+                currentTimer = timerLength;
                 StartCoroutine(SwitchCharacters());
                 
             }
 
-            int seconds = Mathf.FloorToInt(timerLength);  // Get the whole seconds
-            int milliseconds = Mathf.FloorToInt((timerLength - seconds) * 100);  // Get the milliseconds
+            int seconds = Mathf.FloorToInt(currentTimer);  // Get the whole seconds
+            int milliseconds = Mathf.FloorToInt((currentTimer - seconds) * 100);  // Get the milliseconds
 
             // Update the timerText UI element
             timerText.text = string.Format("{0:00}:{1:00}", seconds, milliseconds);
@@ -47,6 +53,17 @@ public class LevelMetadata : MonoBehaviour
     {
         isSwitching = true;
         yield return new WaitForSeconds(0.5f);
+        if(playerAisActive)
+        {
+            playerB.SetActive(true);
+            playerA.SetActive(false);
+        } else {
+            playerA.SetActive(true);
+            playerB.SetActive(false);
+        }
+        playerAisActive = !playerAisActive;
+        isSwitching = false;
+
 
 
     }
