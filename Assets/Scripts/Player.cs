@@ -6,5 +6,7 @@ using UnityEngine;
 
 public interface Player 
 {
+
+    public void Die() {}
  
 }
