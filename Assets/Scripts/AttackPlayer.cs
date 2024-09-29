@@ -21,6 +21,8 @@ public class AttackPlayer : MonoBehaviour, Player
 
     public Transform firePoint;
 
+    public GameObject platformsParent;
+
     int health = 1;
 
     void Start() {
@@ -103,7 +105,37 @@ public class AttackPlayer : MonoBehaviour, Player
         SceneManager.LoadScene(currentScene.name); // Reload the current scene
     }
 
-    public void OnSwitch() {
+    public void OnSwitch() 
+{
+    Transform parentTransform = platformsParent.transform;
+    StartCoroutine(ShrinkPlatformsSequentially(parentTransform));
+}
+
+private IEnumerator ShrinkPlatformsSequentially(Transform parentTransform)
+{
+    // Loop through all children of platformsParent
+    int count = 0;
+    for (int i = 0; i < parentTransform.childCount; i++)
+    {
+        Transform platform = parentTransform.GetChild(i);
+        count++;
+        Debug.Log(platform.name + " " + count);
+
+        // Get the PlayerCreatedPlatform component from the child platform
+        PlayerCreatedPlatform platformComponent = platform.GetComponent<PlayerCreatedPlatform>();
         
+        // Assume the component exists and directly call ShrinkPlatform method
+        if (platformComponent != null)
+        {
+            platformComponent.ShrinkPlatform();
+            
+            // Wait for 2 seconds before shrinking the next platform
+            yield return new WaitForSeconds(2f);
+        }
+        else
+        {
+            Debug.LogWarning("Platform component not found on " + platform.name);
+        }
     }
+}
 }

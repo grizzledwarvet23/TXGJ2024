@@ -14,7 +14,7 @@ public class PlayerCreatedPlatform : MonoBehaviour
     void Start()
     {
         // Start the shrink coroutine when the platform is created
-        StartCoroutine(ShrinkAndDestroy());
+        
     }
 
     private IEnumerator ShrinkAndDestroy()
@@ -35,6 +35,11 @@ public class PlayerCreatedPlatform : MonoBehaviour
 
         // Destroy the GameObject
         Destroy(gameObject);
+    }
+
+    public void ShrinkPlatform()
+    {
+        StartCoroutine(ShrinkAndDestroy());
     }
 
     // Update is called once per frame

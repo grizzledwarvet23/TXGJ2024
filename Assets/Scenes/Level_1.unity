@@ -578,6 +578,7 @@ MonoBehaviour:
   projectile: {fileID: 1156604740608721221, guid: 15273344664eae44491f750326239aa5, type: 3}
   projectileSpeed: 20
   firePoint: {fileID: 1433881843}
+  platformsParent: {fileID: 1740512006}
 --- !u!50 &239730080
 Rigidbody2D:
   serializedVersion: 4
