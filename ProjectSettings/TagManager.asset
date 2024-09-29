@@ -8,6 +8,7 @@ TagManager:
   - ShooterPlayer
   - Enemy
   - Monster
+  - Bullet
   layers:
   - Default
   - TransparentFX
