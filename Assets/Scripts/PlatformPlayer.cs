@@ -74,17 +74,17 @@ public class PlatformPlayer : MonoBehaviour, Player
     void PushPlayer()
     {
         // Generate a random X direction (either -1 or 1) for left or right
-        float randomXDirection = Random.Range(-0.25f, 0.25f);
+        float choice = Random.Range(-1, 1);
+        float randomXDirection = 3;
+        if(choice < 0)
+        {
+            randomXDirection = -3;
+        }
 
         // Set the Y direction to be positive
-        float yDirection = 0.1f;
+        float yDirection = 2.5f;
 
-        // Create a vector for the force
-        Vector2 pushDirection = new Vector2(randomXDirection, yDirection).normalized;
-        pushDirection.Normalize();
-
-        // Apply force to the player's Rigidbody in that direction
         rb.velocity = Vector2.zero;
-        rb.AddForce(pushDirection * pushForce, ForceMode2D.Impulse);
+        rb.AddForce(new Vector2(randomXDirection, yDirection), ForceMode2D.Impulse);
     }
 }

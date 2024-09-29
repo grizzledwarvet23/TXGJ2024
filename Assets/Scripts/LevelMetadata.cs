@@ -20,6 +20,14 @@ public class LevelMetadata : MonoBehaviour
 
     private bool isSwitching = false;
 
+    public AudioSource musicTrackA;
+    public AudioSource musicTrackB;
+
+    private float trackAPosition = 0.0f;
+    private float trackBPosition = 0.0f;
+
+    public AudioSource wakeupSound;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -52,6 +60,20 @@ public class LevelMetadata : MonoBehaviour
     IEnumerator SwitchCharacters()
     {
         isSwitching = true;
+        wakeupSound.Play();
+        if(playerAisActive)
+        {
+            trackAPosition = musicTrackA.time;
+            musicTrackA.Stop();
+            musicTrackB.Play();
+        }
+        else {
+            trackBPosition = musicTrackB.time;
+            musicTrackB.Stop();
+            musicTrackA.Play();
+        }
+
+
         yield return new WaitForSeconds(0.1f);
         if(playerAisActive)
         {
