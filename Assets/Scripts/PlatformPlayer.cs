@@ -34,6 +34,8 @@ public class PlatformPlayer : MonoBehaviour, Player
 
     public GameObject platformShadow;
 
+    public GameObject platformsParent;
+
     int health = 1;
 
 
@@ -82,7 +84,7 @@ public class PlatformPlayer : MonoBehaviour, Player
     void CreatePlatform()
     {
         StartCoroutine(doPlatformCooldown());
-        Instantiate(tempPlatform, platformPosition.position, Quaternion.identity);
+        Instantiate(tempPlatform, platformPosition.position, Quaternion.identity, platformsParent.transform);
 
         if(platformCreateSound != null) {
             platformCreateSound.Play();
