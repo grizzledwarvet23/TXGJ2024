@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class PlatformPlayer : MonoBehaviour, Player
 {
@@ -24,6 +25,13 @@ public class PlatformPlayer : MonoBehaviour, Player
 
     private bool canPlacePlatform = true;
 
+    private int numPlatformsLeft = 5;
+
+    public TextMeshProUGUI platformCounterText;
+
+    public AudioSource platformCreateSound;
+
+    public GameObject platformShadow;
 
 
     void Start() {
@@ -42,9 +50,21 @@ public class PlatformPlayer : MonoBehaviour, Player
             rb.velocity = new Vector2(rb.velocity.x, jumpHeight);
         }
 
-        if(Input.GetMouseButtonDown(0) && canPlacePlatform)
+        if(Input.GetMouseButtonDown(0) && canPlacePlatform && numPlatformsLeft > 0)
         {
+            numPlatformsLeft--;
+            platformCounterText.text = "x " + numPlatformsLeft;
+
             CreatePlatform();
+        }
+
+        if(numPlatformsLeft<=0)
+        {
+            platformShadow.SetActive(false);
+        } 
+        else
+        {
+            platformShadow.SetActive(true);
         }
     }
 
@@ -60,6 +80,10 @@ public class PlatformPlayer : MonoBehaviour, Player
     {
         StartCoroutine(doPlatformCooldown());
         Instantiate(tempPlatform, platformPosition.position, Quaternion.identity);
+        
+        if(platformCreateSound != null) {
+            platformCreateSound.Play();
+        }
         PushPlayer();
     }
 
@@ -86,5 +110,9 @@ public class PlatformPlayer : MonoBehaviour, Player
 
         rb.velocity = Vector2.zero;
         rb.AddForce(new Vector2(randomXDirection, yDirection), ForceMode2D.Impulse);
+    }
+
+    public void OnSwitch() {
+        numPlatformsLeft = 5;
     }
 }

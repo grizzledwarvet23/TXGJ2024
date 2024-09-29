@@ -8,5 +8,7 @@ public interface Player
 {
 
     public void Die() {}
+
+    public void OnSwitch() {}
  
 }

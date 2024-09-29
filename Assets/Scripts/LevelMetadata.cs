@@ -28,6 +28,10 @@ public class LevelMetadata : MonoBehaviour
 
     public AudioSource wakeupSound;
 
+    public GameObject playerA_UI;
+    public GameObject playerB_UI;
+    
+
     // Start is called before the first frame update
     void Start()
     {
@@ -79,9 +83,23 @@ public class LevelMetadata : MonoBehaviour
         {
             playerB.SetActive(true);
             playerA.SetActive(false);
+
+            if(playerB.GetComponent<Player>() != null)
+            {
+                playerB.GetComponent<Player>().OnSwitch();
+            }
+            playerB_UI.SetActive(true);
+            playerA_UI.SetActive(false);
         } else {
             playerA.SetActive(true);
             playerB.SetActive(false);
+
+            if(playerA.GetComponent<Player>() != null)
+            {
+                playerA.GetComponent<Player>().OnSwitch();
+            }
+            playerA_UI.SetActive(true);
+            playerB_UI.SetActive(false);
         }
         playerAisActive = !playerAisActive;
         isSwitching = false;

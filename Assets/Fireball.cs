@@ -26,4 +26,6 @@ public class Fireball : MonoBehaviour
         yield return new WaitForSeconds(time);
         Destroy(gameObject); // Destroy after a set time if not already destroyed
     }
+
+    
 }

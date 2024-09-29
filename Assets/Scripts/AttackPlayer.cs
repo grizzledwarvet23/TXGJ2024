@@ -73,4 +73,8 @@ public class AttackPlayer : MonoBehaviour, Player
         Scene currentScene = SceneManager.GetActiveScene(); // Get the current scene
         SceneManager.LoadScene(currentScene.name); // Reload the current scene
     }
+
+    public void OnSwitch() {
+        
+    }
 }
