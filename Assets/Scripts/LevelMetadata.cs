@@ -107,4 +107,8 @@ public class LevelMetadata : MonoBehaviour
 
 
     }
+
+    public bool isPlayerAActive() {
+        return playerAisActive;
+    }
 }
