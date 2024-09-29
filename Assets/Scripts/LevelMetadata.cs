@@ -64,17 +64,27 @@ public class LevelMetadata : MonoBehaviour
     IEnumerator SwitchCharacters()
     {
         isSwitching = true;
-        wakeupSound.Play();
+        if(wakeupSound != null) {
+            wakeupSound.Play();
+        }
         if(playerAisActive)
         {
-            trackAPosition = musicTrackA.time;
-            musicTrackA.Stop();
-            musicTrackB.Play();
+            trackAPosition = musicTrackA != null ? musicTrackA.time : 0;
+            if(musicTrackA != null) {
+                musicTrackA.Stop();
+            }
+            if(musicTrackB != null) {
+                musicTrackB.Play();
+            }
         }
         else {
-            trackBPosition = musicTrackB.time;
-            musicTrackB.Stop();
-            musicTrackA.Play();
+            trackBPosition = musicTrackB != null ? musicTrackB.time : 0;
+            if(musicTrackB != null) {
+                musicTrackB.Stop();
+            }
+            if(musicTrackA != null) {
+                musicTrackA.Play();
+            }
         }
 
 
@@ -84,22 +94,29 @@ public class LevelMetadata : MonoBehaviour
             playerB.SetActive(true);
             playerA.SetActive(false);
 
-            if(playerB.GetComponent<Player>() != null)
-            {
-                playerB.GetComponent<Player>().OnSwitch();
+            
+            playerB.GetComponent<Player>().OnSwitch();
+            
+
+            if(playerB_UI != null) {
+                playerB_UI.SetActive(true);
             }
-            playerB_UI.SetActive(true);
-            playerA_UI.SetActive(false);
+            if(playerA_UI != null) {
+                playerA_UI.SetActive(false);
+            }
         } else {
             playerA.SetActive(true);
             playerB.SetActive(false);
 
-            if(playerA.GetComponent<Player>() != null)
-            {
-                playerA.GetComponent<Player>().OnSwitch();
+            
+            playerA.GetComponent<Player>().OnSwitch();
+            
+            if(playerA_UI != null) {
+                playerA_UI.SetActive(true);
             }
-            playerA_UI.SetActive(true);
-            playerB_UI.SetActive(false);
+            if(playerB_UI != null) {
+                playerB_UI.SetActive(false);
+            }
         }
         playerAisActive = !playerAisActive;
         isSwitching = false;

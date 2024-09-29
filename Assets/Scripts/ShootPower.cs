@@ -28,7 +28,7 @@ public class ShootPower : MonoBehaviour
         Vector2 direction = (mousePosition - transform.position).normalized;
         direction.Normalize();
 
-        bullet = bulletPrefab.GetComponent<Bullet>();
-        bullet.setDirection(direction);
+        // bullet = bulletPrefab.GetComponent<Bullet>();
+        // bullet.setDirection(direction);
     }
 }

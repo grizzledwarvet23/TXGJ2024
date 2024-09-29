@@ -469,9 +469,9 @@ Transform:
   m_GameObject: {fileID: 376300446}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.3770013, y: 5.1629996, z: 0}
-  m_LocalScale: {x: 50, y: 50, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalPosition: {x: 5.3770013, y: 5.46, z: 0}
+  m_LocalScale: {x: 100, y: 100, z: 2}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1217952166}
   m_Father: {fileID: 0}
@@ -839,6 +839,11 @@ MonoBehaviour:
   playerB: {fileID: 2029641729}
   timerText: {fileID: 258902946}
   timerLength: 5
+  musicTrackA: {fileID: 0}
+  musicTrackB: {fileID: 0}
+  wakeupSound: {fileID: 0}
+  playerA_UI: {fileID: 0}
+  playerB_UI: {fileID: 0}
 --- !u!4 &1272824525
 Transform:
   m_ObjectHideFlags: 0

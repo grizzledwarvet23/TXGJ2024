@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class PlatformPlayer : MonoBehaviour, Player
 {
@@ -80,7 +81,7 @@ public class PlatformPlayer : MonoBehaviour, Player
     {
         StartCoroutine(doPlatformCooldown());
         Instantiate(tempPlatform, platformPosition.position, Quaternion.identity);
-        
+
         if(platformCreateSound != null) {
             platformCreateSound.Play();
         }
@@ -113,6 +114,16 @@ public class PlatformPlayer : MonoBehaviour, Player
     }
 
     public void OnSwitch() {
+        Debug.Log("we switched!");
         numPlatformsLeft = 5;
+        platformCounterText.text = "x " + numPlatformsLeft;
     }
+
+    public void Die()
+    {
+        Scene currentScene = SceneManager.GetActiveScene(); // Get the current scene
+        SceneManager.LoadScene(currentScene.name); // Reload the current scene
+    }
+
+
 }

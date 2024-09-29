@@ -698,7 +698,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fb678b489c629a45891b7ac4d845e0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  horizontalVelocity: 7
+  horizontalVelocity: 5
   jumpHeight: 8
   groundLayer:
     serializedVersion: 2
@@ -706,7 +706,7 @@ MonoBehaviour:
   groundCheck: {fileID: 932911902}
   groundCheckRadius: 0.2
   projectile: {fileID: 1156604740608721221, guid: 15273344664eae44491f750326239aa5, type: 3}
-  projectileSpeed: 15
+  projectileSpeed: 20
   firePoint: {fileID: 1433881843}
 --- !u!50 &239730080
 Rigidbody2D:
@@ -1985,8 +1985,8 @@ EdgeCollider2D:
   m_Offset: {x: 0, y: 0}
   m_EdgeRadius: 0
   m_Points:
-  - {x: -28.65, y: -7.1913486}
-  - {x: 57.56, y: -7.191349}
+  - {x: -48.03, y: -7.1913486}
+  - {x: 122.7, y: -7.191349}
   m_AdjacentStartPoint: {x: 0, y: 0}
   m_AdjacentEndPoint: {x: 0, y: 0}
   m_UseAdjacentStartPoint: 0
@@ -2087,7 +2087,8 @@ Transform:
   m_LocalPosition: {x: 25.75, y: -1.65, z: 0}
   m_LocalScale: {x: 0.8, y: 0.8, z: 0.8}
   m_ConstrainProportionsScale: 1
-  m_Children: []
+  m_Children:
+  - {fileID: 1702194955}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &1408743363
@@ -2176,10 +2177,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 2
   patrolDistance: 3
-  detectionRange: 10
+  detectionRange: 4
   projectilePrefab: {fileID: 1156604740608721221, guid: 15273344664eae44491f750326239aa5, type: 3}
   fireRate: 1
-  firePoint: {fileID: 0}
+  firePoint: {fileID: 1702194955}
   playerLayer:
     serializedVersion: 2
     m_Bits: 256
@@ -2342,6 +2343,37 @@ MonoBehaviour:
   m_CameraActivatedEvent:
     m_PersistentCalls:
       m_Calls: []
+--- !u!1 &1702194954
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1702194955}
+  m_Layer: 0
+  m_Name: Firepoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1702194955
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1702194954}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.21, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1408743362}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1760533381
 GameObject:
   m_ObjectHideFlags: 0
@@ -2909,7 +2941,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c659e6f6ffa0cf148807fc66db80d473, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  horizontalVelocity: 7
+  horizontalVelocity: 5
   jumpHeight: 8
   groundLayer:
     serializedVersion: 2

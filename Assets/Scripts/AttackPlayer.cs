@@ -37,10 +37,24 @@ public class AttackPlayer : MonoBehaviour, Player
             rb.velocity = new Vector2(rb.velocity.x, jumpHeight);
         }
 
+
+
+        Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        mousePosition.z = 0;
+        Vector2 direction = (mousePosition - transform.position).normalized;
+        firePoint.position = (Vector2) transform.position + direction;
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        firePoint.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
+
         if(Input.GetMouseButtonDown(0))
         {
             ShootProjectile();
         }
+
+        // if(Input.GetKeyDown(KeyCode.Space))
+        // {
+        //     GameObject newProjectile = Instantiate(projectile, firePoint.position, firePoint.rotation);
+        // }
     }
 
     void FixedUpdate()
@@ -53,19 +67,23 @@ public class AttackPlayer : MonoBehaviour, Player
 
     void ShootProjectile()
     {
-        GameObject newProjectile = Instantiate(projectile, transform.position, Quaternion.identity);
+        Debug.Log(firePoint.rotation);
+        GameObject newProjectile = Instantiate(projectile, firePoint.position, firePoint.rotation);
         Rigidbody2D projectileRb = newProjectile.GetComponent<Rigidbody2D>();
 
-        // Get the mouse position in world space
-        Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        // Calculate the direction from the player to the mouse position
-        Vector2 direction = (mousePosition - transform.position).normalized;
-        direction.Normalize();
-        // .normalized;
+        // projectileRb.velocity = direction * projectileSpeed;
 
-        // Set the projectile's velocity based on the direction and speed
-        Debug.Log(direction);
-        projectileRb.velocity = direction * projectileSpeed;
+        
+
+        // // Get the mouse position in world space
+        // Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        // // Calculate the direction from the player to the mouse position
+        // Vector2 direction = (mousePosition - transform.position).normalized;
+        // direction.Normalize();
+        // // .normalized;
+
+        // // Set the projectile's velocity based on the direction and speed
+        // Debug.Log(direction);
     }
 
     public void Die()
