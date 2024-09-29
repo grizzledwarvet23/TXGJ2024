@@ -34,6 +34,8 @@ public class PlatformPlayer : MonoBehaviour, Player
 
     public GameObject platformShadow;
 
+    int health = 1;
+
 
     void Start() {
         rb = GetComponent<Rigidbody2D>();
@@ -117,6 +119,15 @@ public class PlatformPlayer : MonoBehaviour, Player
         Debug.Log("we switched!");
         numPlatformsLeft = 5;
         platformCounterText.text = "x " + numPlatformsLeft;
+    }
+
+    public void TakeDamage(int d)
+    {
+        health -= d;
+        if(health <= 0)
+        {
+            Die();
+        }
     }
 
     public void Die()

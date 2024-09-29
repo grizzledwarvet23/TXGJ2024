@@ -21,6 +21,8 @@ public class AttackPlayer : MonoBehaviour, Player
 
     public Transform firePoint;
 
+    int health = 1;
+
     void Start() {
         rb = GetComponent<Rigidbody2D>();
     }
@@ -84,6 +86,15 @@ public class AttackPlayer : MonoBehaviour, Player
 
         // // Set the projectile's velocity based on the direction and speed
         // Debug.Log(direction);
+    }
+
+    public void TakeDamage(int d)
+    {
+        health -= d;
+        if(health <= 0)
+        {
+            Die();
+        }
     }
 
     public void Die()

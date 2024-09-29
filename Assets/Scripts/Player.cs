@@ -10,5 +10,10 @@ public interface Player
     public void Die() {}
 
     public void OnSwitch() {}
+
+    public void TakeDamage(int d)
+    {
+        
+    }
  
 }

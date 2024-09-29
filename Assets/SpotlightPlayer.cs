@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class SpotlightPlayer : MonoBehaviour
+public class SpotlightPlayer : MonoBehaviour, Player
 {
     public float horizontalVelocity;
     public float jumpHeight;
@@ -16,6 +16,8 @@ public class SpotlightPlayer : MonoBehaviour
     public float groundCheckRadius = 0.2f;
 
     private float pushForce = 15;
+
+    int health = 1;
 
 
     void Start() {
@@ -43,6 +45,14 @@ public class SpotlightPlayer : MonoBehaviour
         }
     }
 
+    public void TakeDamage(int d)
+    {
+        health -= d;
+        if(health <= 0)
+        {
+            Die();
+        }
+    }
 
     public void OnSwitch() {
         Debug.Log("we switched!");

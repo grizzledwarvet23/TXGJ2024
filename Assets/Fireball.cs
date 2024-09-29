@@ -8,6 +8,7 @@ public class Fireball : MonoBehaviour
     public float velocity;
     private Rigidbody2D rb;
 
+    public bool enemy;
 
 
     // Start is called before the first frame update
@@ -31,6 +32,20 @@ public class Fireball : MonoBehaviour
          if (other.CompareTag("Ground"))
         {
             Destroy(gameObject); 
+        }
+        if(enemy)
+        {
+            if(other.CompareTag("Player"))
+            {
+                Player player = other.GetComponent<Player>();
+                player.TakeDamage(1);
+
+            }
+        } else {
+            if(other.CompareTag("Enemy"))
+            {
+                
+            }
         }
     }
 

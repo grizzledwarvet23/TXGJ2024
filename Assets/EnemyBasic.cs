@@ -20,6 +20,7 @@ public class EnemyBasic : MonoBehaviour
 
     // Rigidbody for movement
     private Rigidbody2D rb;
+    
 
     // Start is called before the first frame update
     void Start()
@@ -82,7 +83,7 @@ public class EnemyBasic : MonoBehaviour
 
         // Rotate the firePoint towards the player
         firePoint.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
-    }
+    }   
 
     void Shoot()
     {
