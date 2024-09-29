@@ -20,4 +20,19 @@ public class MainMenu : MonoBehaviour
         Application.Quit();
         Debug.Log("Application Quit.");
     }
+
+    public void SelectLevelOne() {
+        Debug.Log("loading scene 1");
+        SceneManager.LoadScene("Level_1");
+    }
+
+    public void SelectLevelTwo() {
+        Debug.Log("loading scene 2");
+        SceneManager.LoadScene("Level_2");
+    }
+
+    public void SelectLevelThree() {
+        Debug.Log("loading scene 3");
+        SceneManager.LoadScene("Level_3");
+    }
 }
