@@ -38,9 +38,14 @@ public class PlatformPlayer : MonoBehaviour, Player
 
     int health = 1;
 
+    private Animator animator;
+
+    private SpriteRenderer spriteRenderer;  // Reference to SpriteRenderer
 
     void Start() {
         rb = GetComponent<Rigidbody2D>();
+        spriteRenderer = GetComponent<SpriteRenderer>();  // Get the SpriteRenderer component
+        animator = GetComponent<Animator>();
     }
     
 
@@ -76,13 +81,29 @@ public class PlatformPlayer : MonoBehaviour, Player
     void FixedUpdate()
     {
         float move = Input.GetAxis("Horizontal");
+
         if(move != 0) {
             rb.velocity = new Vector2(move * horizontalVelocity, rb.velocity.y);
+            FlipSprite(move);  // Flip the sprite based on the direction of movement
+        }
+    }
+
+    // Method to flip the sprite
+    void FlipSprite(float move)
+    {
+        if (move > 0)
+        {
+            spriteRenderer.flipX = false;  // Face right
+        }
+        else if (move < 0)
+        {
+            spriteRenderer.flipX = true;   // Face left
         }
     }
 
     void CreatePlatform()
     {
+        animator.SetBool("CreatingPlatform", true);
         StartCoroutine(doPlatformCooldown());
         Instantiate(tempPlatform, platformPosition.position, Quaternion.identity, platformsParent.transform);
 
@@ -90,6 +111,11 @@ public class PlatformPlayer : MonoBehaviour, Player
             platformCreateSound.Play();
         }
         PushPlayer();
+    }
+
+    public void SetNotPlacingPlatform()
+    {
+        animator.SetBool("CreatingPlatform", false);
     }
 
     IEnumerator doPlatformCooldown()
@@ -137,6 +163,4 @@ public class PlatformPlayer : MonoBehaviour, Player
         Scene currentScene = SceneManager.GetActiveScene(); // Get the current scene
         SceneManager.LoadScene(currentScene.name); // Reload the current scene
     }
-
-
 }
