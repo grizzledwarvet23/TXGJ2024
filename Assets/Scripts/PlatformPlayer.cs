@@ -145,6 +145,10 @@ public class PlatformPlayer : MonoBehaviour, Player
 
     public void OnSwitch() {
         Debug.Log("we switched!");
+        foreach (Transform child in platformsParent.transform)
+        {
+            Destroy(child.gameObject);
+        }
         numPlatformsLeft = 5;
         platformCounterText.text = "x " + numPlatformsLeft;
     }
