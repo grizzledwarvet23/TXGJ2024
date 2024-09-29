@@ -19,6 +19,11 @@ public class SpotlightPlayer : MonoBehaviour, Player
 
     int health = 1;
 
+    public GameObject regularTilemap;
+    public GameObject echolocationTilemap;
+
+
+
 
     void Start() {
         rb = GetComponent<Rigidbody2D>();

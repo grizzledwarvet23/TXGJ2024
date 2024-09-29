@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement; 
+using UnityEngine.Tilemaps;
 
 public class EcholocationPlayer : MonoBehaviour, Player
 {
@@ -18,6 +19,9 @@ public class EcholocationPlayer : MonoBehaviour, Player
     int health = 1;
 
     public AudioSource echoSound;
+
+    public GameObject regularTilemap;
+    public GameObject echolocationTilemap;
 
     // Reference to the Light2D component in the child object
     private UnityEngine.Rendering.Universal.Light2D echolocationLight;
@@ -82,15 +86,27 @@ public class EcholocationPlayer : MonoBehaviour, Player
     IEnumerator EcholocationEffect()
     {
         // Set the light intensity to 1
-        echolocationLight.intensity = 1;
+        // echolocationLight.intensity = 1;
 
-        // Gradually reduce the intensity over the duration
+        // Get the Tilemap and TilemapRenderer components of the echolocationTilemap
+        Tilemap echolocationTilemapComponent = echolocationTilemap.GetComponent<Tilemap>();
+        Tilemap echolocationTilemapRenderer = echolocationTilemap.GetComponent<Tilemap>();
+
+        // Set the starting color of the tilemap to white
+        echolocationTilemapRenderer.color = Color.white;
+
+        // Duration of the echolocation effect
         float elapsedTime = 0;
 
+        // Gradually reduce the light intensity and tilemap color over the duration
         while (elapsedTime < echolocationDuration)
         {
-            // Calculate the new intensity based on time passed
+            // Calculate the new intensity for the light based on time passed
             echolocationLight.intensity = Mathf.Lerp(1, 0, elapsedTime / echolocationDuration);
+
+            // Calculate the color from white to black based on time passed
+            Color newColor = Color.Lerp(Color.white, Color.black, elapsedTime / echolocationDuration);
+            echolocationTilemapRenderer.color = newColor;
 
             // Increase the elapsed time
             elapsedTime += Time.deltaTime;
@@ -99,9 +115,34 @@ public class EcholocationPlayer : MonoBehaviour, Player
             yield return null;
         }
 
-        // Ensure the light intensity is set to 0 at the end
+        // Ensure the light intensity and tilemap color are set to final values at the end
         echolocationLight.intensity = 0;
+        echolocationTilemapRenderer.color = Color.black;
     }
+
+    // IEnumerator EcholocationEffect()
+    // {
+    //     // Set the light intensity to 1
+    //     echolocationLight.intensity = 1;
+
+    //     // Gradually reduce the intensity over the duration
+    //     float elapsedTime = 0;
+
+    //     while (elapsedTime < echolocationDuration)
+    //     {
+    //         // Calculate the new intensity based on time passed
+    //         echolocationLight.intensity = Mathf.Lerp(1, 0, elapsedTime / echolocationDuration);
+
+    //         // Increase the elapsed time
+    //         elapsedTime += Time.deltaTime;
+
+    //         // Wait for the next frame
+    //         yield return null;
+    //     }
+
+    //     // Ensure the light intensity is set to 0 at the end
+    //     echolocationLight.intensity = 0;
+    // }
 
     void FixedUpdate()
     {
@@ -128,5 +169,7 @@ public class EcholocationPlayer : MonoBehaviour, Player
     public void OnSwitch()
     {
         // Implement switching logic here if needed
+        echolocationTilemap.SetActive(true);
+        regularTilemap.SetActive(false);
     }
 }
