@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class Monster : MonoBehaviour
 {
-    public float moveSpeed = 5f;          // Speed of the monster
+    public float moveSpeed;          // Speed of the monster
+
+    public float quickSpeed;
     public float smoothFollowFactor = 0.1f; // How smoothly the monster follows the player
     public float inertia = 0.05f;         // Amount of inertia (resistance to changing direction)
 
@@ -12,6 +14,8 @@ public class Monster : MonoBehaviour
     private Rigidbody2D rb;
     private Vector2 currentVelocity;      // Stores current velocity to add inertia
     private bool isFacingRight = true;    // Track if the monster is facing right
+
+    public AudioSource screechSound;
 
     void Start()
     {
@@ -47,6 +51,20 @@ public class Monster : MonoBehaviour
         {
             Flip();
         }
+    }
+
+    public void Trigger()
+    {
+        screechSound.Play();
+        StartCoroutine(SpeedUp());
+    }
+
+    public IEnumerator SpeedUp()
+    {
+        float oldSpeed = moveSpeed;
+        moveSpeed = quickSpeed;
+        yield return new WaitForSeconds(1);
+        moveSpeed = oldSpeed;
     }
 
     // Flip the monster's sprite
