@@ -20,6 +20,8 @@ public class EnemyBasic : MonoBehaviour
 
     // Rigidbody for movement
     private Rigidbody2D rb;
+
+    private int health = 2;
     
 
     // Start is called before the first frame update
@@ -33,6 +35,15 @@ public class EnemyBasic : MonoBehaviour
     void Update()
     {
         DetectAndShootPlayer();
+    }
+
+    public void TakeDamage(int d)
+    {
+        health -= d;
+        if(health <= 0)
+        {
+            Destroy(gameObject);
+        }
     }
 
     void Patrol()

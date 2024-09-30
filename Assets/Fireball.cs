@@ -44,7 +44,9 @@ public class Fireball : MonoBehaviour
         } else {
             if(other.CompareTag("Enemy"))
             {
-                
+                EnemyBasic enemy = other.GetComponent<EnemyBasic>();
+                enemy.TakeDamage(1);
+
             }
         }
     }

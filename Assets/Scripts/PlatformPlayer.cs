@@ -36,7 +36,7 @@ public class PlatformPlayer : MonoBehaviour, Player
 
     public GameObject platformsParent;
 
-    int health = 1;
+    int health = 3;
 
     private Animator animator;
 

@@ -10,6 +10,11 @@ public class EcholocationPlayer : MonoBehaviour, Player
     public float jumpHeight;
     private Rigidbody2D rb;
 
+
+    public GameObject echoBG;
+    public GameObject regularBG;
+
+
     private bool isGrounded = false;
 
     public LayerMask groundLayer;
@@ -32,11 +37,17 @@ public class EcholocationPlayer : MonoBehaviour, Player
     // Range in which the echolocation can detect monsters
     public float echolocationRange = 10.0f;
 
+    private Animator animator;
+
+    private SpriteRenderer spriteRenderer;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         // Find the Light2D component on the child object
         echolocationLight = GetComponentInChildren<UnityEngine.Rendering.Universal.Light2D>();
+        animator = GetComponent<Animator>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     void Update()
@@ -49,15 +60,32 @@ public class EcholocationPlayer : MonoBehaviour, Player
             rb.velocity = new Vector2(rb.velocity.x, jumpHeight);
         }
 
+        if(Input.GetAxis("Horizontal") != 0)
+        {
+            animator.SetBool("moving", true);
+        } else {
+            animator.SetBool("moving", false);
+        }
+
         // If left mouse button is pressed, trigger the echolocation
         if (Input.GetMouseButtonDown(0))
         {
             DoEcholocation();
         }
+
+        
+    }
+
+    IEnumerator SetNoEchoAnimation()
+    {
+        yield return new WaitForSeconds(0.5f);
+        animator.SetBool("echo", false);
     }
 
     void DoEcholocation()
     {
+        animator.SetBool("echo", true);
+        StartCoroutine(SetNoEchoAnimation());
         echoSound.Play();
         StartCoroutine(EcholocationEffect());
 
@@ -87,7 +115,6 @@ public class EcholocationPlayer : MonoBehaviour, Player
     {
         // Set the light intensity to 1
         // echolocationLight.intensity = 1;
-
         // Get the Tilemap and TilemapRenderer components of the echolocationTilemap
         Tilemap echolocationTilemapComponent = echolocationTilemap.GetComponent<Tilemap>();
         Tilemap echolocationTilemapRenderer = echolocationTilemap.GetComponent<Tilemap>();
@@ -144,11 +171,28 @@ public class EcholocationPlayer : MonoBehaviour, Player
     //     echolocationLight.intensity = 0;
     // }
 
+
+
     void FixedUpdate()
     {
         // Handle horizontal movement
         float move = Input.GetAxis("Horizontal");
-        rb.velocity = new Vector2(move * horizontalVelocity, rb.velocity.y);
+        if(move != 0) {
+            rb.velocity = new Vector2(move * horizontalVelocity, rb.velocity.y);
+            FlipSprite(move);
+        }
+    }
+
+    void FlipSprite(float move)
+    {
+        if (move > 0)
+        {
+            spriteRenderer.flipX = false;  // Face right
+        }
+        else if (move < 0)
+        {
+            spriteRenderer.flipX = true;   // Face left
+        }
     }
 
     public void TakeDamage(int d)
@@ -168,8 +212,20 @@ public class EcholocationPlayer : MonoBehaviour, Player
 
     public void OnSwitch()
     {
+        Tilemap echolocationTilemapRenderer = echolocationTilemap.GetComponent<Tilemap>();
+
         // Implement switching logic here if needed
         echolocationTilemap.SetActive(true);
         regularTilemap.SetActive(false);
+
+        echoBG.SetActive(true);
+        regularBG.SetActive(false);
+        if(echolocationLight == null) {
+            echolocationLight= GetComponentInChildren<UnityEngine.Rendering.Universal.Light2D>();
+        }
+        echolocationLight.intensity = 0;
+        echolocationTilemapRenderer.color = Color.black;
+        
+
     }
 }

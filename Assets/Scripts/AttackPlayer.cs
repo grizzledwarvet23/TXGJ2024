@@ -23,10 +23,28 @@ public class AttackPlayer : MonoBehaviour, Player
 
     public GameObject platformsParent;
 
-    int health = 1;
+    private SpriteRenderer spriteRenderer;
+
+    private Animator animator;
+
+    int health = 3;
 
     void Start() {
         rb = GetComponent<Rigidbody2D>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        animator = GetComponent<Animator>();
+    }
+
+    void FlipSprite(float move)
+    {
+        if (move > 0)
+        {
+            spriteRenderer.flipX = false;  // Face right
+        }
+        else if (move < 0)
+        {
+            spriteRenderer.flipX = true;   // Face left
+        }
     }
     
 
@@ -65,12 +83,24 @@ public class AttackPlayer : MonoBehaviour, Player
     {
         // we do movement:
         float move = Input.GetAxis("Horizontal");
-        rb.velocity = new Vector2(move * horizontalVelocity, rb.velocity.y);
+        if(move != 0) {
+            rb.velocity = new Vector2(move * horizontalVelocity, rb.velocity.y);
+            FlipSprite(move);  // Flip the sprite based on the direction of movement
+        }
 
+    }
+
+    IEnumerator SetNotAttacking()
+    {
+        yield return new WaitForSeconds(0.25f);
+        animator.SetBool("attacking", false);
+        
     }
 
     void ShootProjectile()
     {
+        animator.SetBool("attacking", true);
+        StartCoroutine(SetNotAttacking());
         Debug.Log(firePoint.rotation);
         GameObject newProjectile = Instantiate(projectile, firePoint.position, firePoint.rotation);
         Rigidbody2D projectileRb = newProjectile.GetComponent<Rigidbody2D>();

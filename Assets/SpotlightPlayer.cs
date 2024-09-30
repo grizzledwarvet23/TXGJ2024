@@ -22,11 +22,20 @@ public class SpotlightPlayer : MonoBehaviour, Player
     public GameObject regularTilemap;
     public GameObject echolocationTilemap;
 
+    public GameObject echoBG;
+    public GameObject regularBG;
+
+
+    private SpriteRenderer spriteRenderer;
+
+    private Animator animator;
 
 
 
     void Start() {
         rb = GetComponent<Rigidbody2D>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        animator = GetComponent<Animator>();
     }
     
 
@@ -40,6 +49,13 @@ public class SpotlightPlayer : MonoBehaviour, Player
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpHeight);
         }
+
+        if(Input.GetAxis("Horizontal") != 0)
+        {
+            animator.SetBool("moving", true);
+        } else {
+            animator.SetBool("moving", false);
+        }
     }
 
     void FixedUpdate()
@@ -47,8 +63,23 @@ public class SpotlightPlayer : MonoBehaviour, Player
         float move = Input.GetAxis("Horizontal");
         if(move != 0) {
             rb.velocity = new Vector2(move * horizontalVelocity, rb.velocity.y);
+            FlipSprite(move);
+        } else {
         }
     }
+
+    void FlipSprite(float move)
+    {
+        if (move > 0)
+        {
+            spriteRenderer.flipX = false;  // Face right
+        }
+        else if (move < 0)
+        {
+            spriteRenderer.flipX = true;   // Face left
+        }
+    }
+
 
     public void TakeDamage(int d)
     {
@@ -60,7 +91,11 @@ public class SpotlightPlayer : MonoBehaviour, Player
     }
 
     public void OnSwitch() {
-        Debug.Log("we switched!");
+        echolocationTilemap.SetActive(false);
+        regularTilemap.SetActive(true);
+
+        echoBG.SetActive(false);
+        regularBG.SetActive(true);
     }
 
     public void Die()

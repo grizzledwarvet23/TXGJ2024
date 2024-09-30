@@ -26,7 +26,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8340210197221271557, guid: 15273344664eae44491f750326239aa5, type: 3}
       propertyPath: velocity
-      value: 8
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 8393717298356911596, guid: 15273344664eae44491f750326239aa5, type: 3}
       propertyPath: m_Controller
