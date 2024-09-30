@@ -20,6 +20,8 @@ public class ShieldPlayer : MonoBehaviour, Player
 
     private Transform player;
 
+    public AudioSource ricochetSound;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -101,6 +103,9 @@ public class ShieldPlayer : MonoBehaviour, Player
             {
                 bulletRb.velocity = firePoint.up * bulletRb.velocity.magnitude; // Redirect with the same speed
             }
+
+            ricochetSound.Play();
+            
         }
     }
 }

@@ -35,11 +35,10 @@ public class Bullet : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D hitInfo)
     {
-        // if (hitInfo.CompareTag("Enemy"))
-        // {
-        //     Destroy(hitInfo.gameObject); // Destroy the enemy
-        //     Destroy(gameObject); // Destroy the bullet
-        // }
+        if (hitInfo.CompareTag("Ground"))
+        {
+            Destroy(gameObject); // Destroy the bullet
+        }
     }
 
 }
