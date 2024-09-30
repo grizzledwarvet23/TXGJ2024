@@ -4,16 +4,22 @@ using UnityEngine.SceneManagement;
 public class MainMenu : MonoBehaviour
 {
     public GameObject TitleScreen;
-    public GameObject LevelSelectScreen;
+
+    public GameObject InfoScreen;
+
     public void OnStartButton() {
-        LevelSelectScreen.SetActive(true);
-        TitleScreen.SetActive(false);
+        SelectLevelOne();
     }
 
     public void OnBackButton() 
     {
         TitleScreen.SetActive(true);
-        LevelSelectScreen.SetActive(false);
+        InfoScreen.SetActive(false);
+    }
+
+    public void OnInfoButton() {
+        TitleScreen.SetActive(false);
+        InfoScreen.SetActive(true);
     }
 
     public void OnQuitButton() {
