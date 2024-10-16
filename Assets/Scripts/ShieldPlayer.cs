@@ -104,6 +104,10 @@ public class ShieldPlayer : MonoBehaviour, Player
                 bulletRb.velocity = firePoint.up * bulletRb.velocity.magnitude; // Redirect with the same speed
             }
 
+            
+
+
+
             ricochetSound.Play();
             
         }

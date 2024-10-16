@@ -9,6 +9,7 @@ TagManager:
   - Enemy
   - Monster
   - Bullet
+  - FinalBoss
   layers:
   - Default
   - TransparentFX

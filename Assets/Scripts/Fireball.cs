@@ -46,6 +46,7 @@ public class Fireball : MonoBehaviour
             {
                 EnemyBasic enemy = other.GetComponent<EnemyBasic>();
                 enemy.TakeDamage(1);
+                Destroy(gameObject);
 
             }
         }

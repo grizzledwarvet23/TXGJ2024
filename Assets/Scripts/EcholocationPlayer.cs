@@ -41,8 +41,11 @@ public class EcholocationPlayer : MonoBehaviour, Player
 
     private SpriteRenderer spriteRenderer;
 
+    private bool canEcholocate;
+
     void Start()
     {
+        canEcholocate = true;
         rb = GetComponent<Rigidbody2D>();
         // Find the Light2D component on the child object
         echolocationLight = GetComponentInChildren<UnityEngine.Rendering.Universal.Light2D>();
@@ -68,7 +71,7 @@ public class EcholocationPlayer : MonoBehaviour, Player
         }
 
         // If left mouse button is pressed, trigger the echolocation
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && canEcholocate)
         {
             DoEcholocation();
         }
@@ -84,6 +87,7 @@ public class EcholocationPlayer : MonoBehaviour, Player
 
     void DoEcholocation()
     {
+        canEcholocate = false;
         animator.SetBool("echo", true);
         StartCoroutine(SetNoEchoAnimation());
         echoSound.Play();
@@ -145,6 +149,7 @@ public class EcholocationPlayer : MonoBehaviour, Player
         // Ensure the light intensity and tilemap color are set to final values at the end
         echolocationLight.intensity = 0;
         echolocationTilemapRenderer.color = Color.black;
+        canEcholocate = true;
     }
 
     // IEnumerator EcholocationEffect()
@@ -212,6 +217,7 @@ public class EcholocationPlayer : MonoBehaviour, Player
 
     public void OnSwitch()
     {
+        canEcholocate = true;
         Tilemap echolocationTilemapRenderer = echolocationTilemap.GetComponent<Tilemap>();
 
         // Implement switching logic here if needed

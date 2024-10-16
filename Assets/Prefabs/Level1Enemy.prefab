@@ -129,7 +129,7 @@ BoxCollider2D:
   m_GameObject: {fileID: 7951501878166475395}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 93195f774cec57c45895394d0b195e16, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -191,7 +191,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 4
+  m_Constraints: 7
 --- !u!114 &5206512384502546446
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -206,7 +206,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 2
   patrolDistance: 3
-  detectionRange: 2
+  detectionRange: 3
   projectilePrefab: {fileID: 5069329335260953409, guid: fe067412cf90ed947bdcbc1f3eb569d3, type: 3}
   fireRate: 1
   firePoint: {fileID: 9179562820216223955}

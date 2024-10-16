@@ -85,6 +85,8 @@ public class PlatformPlayer : MonoBehaviour, Player
         if(move != 0) {
             rb.velocity = new Vector2(move * horizontalVelocity, rb.velocity.y);
             FlipSprite(move);  // Flip the sprite based on the direction of movement
+        } else {
+            rb.velocity = new Vector2(0, rb.velocity.y);
         }
     }
 
@@ -149,6 +151,7 @@ public class PlatformPlayer : MonoBehaviour, Player
         {
             Destroy(child.gameObject);
         }
+        canPlacePlatform = true;
         numPlatformsLeft = 5;
         platformCounterText.text = "x " + numPlatformsLeft;
     }

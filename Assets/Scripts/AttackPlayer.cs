@@ -29,7 +29,12 @@ public class AttackPlayer : MonoBehaviour, Player
 
     int health = 3;
 
+    private bool canAttack = true;
+
+    public AudioSource attackSound;
+
     void Start() {
+        canAttack = true;
         rb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
@@ -68,7 +73,7 @@ public class AttackPlayer : MonoBehaviour, Player
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         firePoint.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
 
-        if(Input.GetMouseButtonDown(0))
+        if(Input.GetMouseButtonDown(0) && canAttack)
         {
             ShootProjectile();
         }
@@ -86,23 +91,29 @@ public class AttackPlayer : MonoBehaviour, Player
         if(move != 0) {
             rb.velocity = new Vector2(move * horizontalVelocity, rb.velocity.y);
             FlipSprite(move);  // Flip the sprite based on the direction of movement
+        } else {
+            rb.velocity = new Vector2(0, rb.velocity.y);
         }
 
     }
 
     IEnumerator SetNotAttacking()
     {
+        //one for animation, one for attack boolean.
         yield return new WaitForSeconds(0.25f);
         animator.SetBool("attacking", false);
+        yield return new WaitForSeconds(0.25f);
+        canAttack = true;
         
     }
 
     void ShootProjectile()
     {
+        canAttack = false;
         animator.SetBool("attacking", true);
         StartCoroutine(SetNotAttacking());
-        Debug.Log(firePoint.rotation);
         GameObject newProjectile = Instantiate(projectile, firePoint.position, firePoint.rotation);
+        attackSound.Play();
         Rigidbody2D projectileRb = newProjectile.GetComponent<Rigidbody2D>();
 
         // projectileRb.velocity = direction * projectileSpeed;
@@ -117,7 +128,6 @@ public class AttackPlayer : MonoBehaviour, Player
         // // .normalized;
 
         // // Set the projectile's velocity based on the direction and speed
-        // Debug.Log(direction);
     }
 
     public void TakeDamage(int d)
@@ -136,10 +146,11 @@ public class AttackPlayer : MonoBehaviour, Player
     }
 
     public void OnSwitch() 
-{
-    Transform parentTransform = platformsParent.transform;
-    StartCoroutine(ShrinkPlatformsSequentially(parentTransform));
-}
+    {
+        canAttack = true;
+        Transform parentTransform = platformsParent.transform;
+        StartCoroutine(ShrinkPlatformsSequentially(parentTransform));
+    }
 
 private IEnumerator ShrinkPlatformsSequentially(Transform parentTransform)
 {
@@ -149,7 +160,6 @@ private IEnumerator ShrinkPlatformsSequentially(Transform parentTransform)
     {
         Transform platform = parentTransform.GetChild(i);
         count++;
-        Debug.Log(platform.name + " " + count);
 
         // Get the PlayerCreatedPlatform component from the child platform
         PlayerCreatedPlatform platformComponent = platform.GetComponent<PlayerCreatedPlatform>();

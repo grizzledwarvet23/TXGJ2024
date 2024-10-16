@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 public class Bullet : MonoBehaviour
 {
     public float speed = 8f; // Speed of the bullet
@@ -38,6 +39,11 @@ public class Bullet : MonoBehaviour
         if (hitInfo.CompareTag("Ground"))
         {
             Destroy(gameObject); // Destroy the bullet
+        }
+
+        if(hitInfo.CompareTag("FinalBoss"))
+        {
+            SceneManager.LoadScene("Main Menu");
         }
     }
 
