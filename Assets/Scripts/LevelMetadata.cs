@@ -4,6 +4,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
 using Cinemachine;
+using UnityEngine.UI;
 
 public class LevelMetadata : MonoBehaviour
 {
@@ -39,6 +40,9 @@ public class LevelMetadata : MonoBehaviour
 
     public bool setPlayersOff = false;
 
+    public Slider timerSlider;
+    public Image knobImage;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -57,6 +61,12 @@ public class LevelMetadata : MonoBehaviour
         timerText.color = playerAisActive ? timerColorA : timerColorB;
         Debug.Log(timerColorA);
         Debug.Log(timerText.color);
+
+        if(timerSlider != null)
+        {
+            timerSlider.maxValue = 10;
+            timerSlider.value = currentTimer;
+        }
     }
 
     // Update is called once per frame
@@ -81,6 +91,11 @@ public class LevelMetadata : MonoBehaviour
                 currentTimer -= Time.deltaTime;
             }
 
+            if(timerSlider != null)
+            {
+                timerSlider.value = currentTimer;
+            }
+
             if (playerAisActive && currentTimer >= 10 || !playerAisActive && currentTimer <= 0)
             {
                 Switch();
@@ -91,6 +106,7 @@ public class LevelMetadata : MonoBehaviour
 
             // Update the timerText UI element
             timerText.text = string.Format("{0:00}:{1:00}", seconds, milliseconds);
+            
         }
     }
 
@@ -99,6 +115,13 @@ public class LevelMetadata : MonoBehaviour
         // basically the timer goes from counting up to counting down.
         // currentTimer = 10 - currentTimer;
         StartCoroutine(SwitchCharacters());
+
+        if (knobImage != null)
+        {
+            knobImage.color = playerAisActive ? timerColorB : timerColorA;
+        } else {
+            Debug.Log("KNOB NOT ASSIGNED!");
+        }
     }
 
     IEnumerator SwitchCharacters()

@@ -12,6 +12,16 @@ public class PlatformPlayer : MonoBehaviour, Player
 
     private bool isGrounded = false;
 
+    private float coyoteTime = 0.2f;
+    private float coyoteTimeCounter = 0;
+
+    private float airControlForce = 20;
+    private float maxAirSpeed = 4.2f;
+
+    private float risingGravity = 2f;
+    private float fallingGravity = 3.5f;
+
+
     public LayerMask groundLayer;
     public Transform groundCheck;
     public float groundCheckRadius = 0.2f;
@@ -42,6 +52,8 @@ public class PlatformPlayer : MonoBehaviour, Player
 
     private SpriteRenderer spriteRenderer;  // Reference to SpriteRenderer
 
+    private bool playerBeingPushed = false;
+
     void Start() {
         rb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();  // Get the SpriteRenderer component
@@ -55,9 +67,25 @@ public class PlatformPlayer : MonoBehaviour, Player
         //hey wassup    
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
 
-        if(Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        if(isGrounded)
+        {
+            coyoteTimeCounter = coyoteTime;
+        }
+        else {
+            coyoteTimeCounter -= Time.deltaTime;
+        }
+
+        if(rb.velocity.y < 0)
+        {
+            rb.gravityScale = fallingGravity;
+        } else {
+            rb.gravityScale = risingGravity;
+        }
+
+        if(Input.GetKeyDown(KeyCode.Space) && (isGrounded || coyoteTimeCounter > 0))
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpHeight);
+            coyoteTimeCounter = 0;
         }
 
         if(Input.GetMouseButtonDown(0) && canPlacePlatform && numPlatformsLeft > 0)
@@ -82,11 +110,23 @@ public class PlatformPlayer : MonoBehaviour, Player
     {
         float move = Input.GetAxis("Horizontal");
 
-        if(move != 0) {
-            rb.velocity = new Vector2(move * horizontalVelocity, rb.velocity.y);
-            FlipSprite(move);  // Flip the sprite based on the direction of movement
-        } else {
-            rb.velocity = new Vector2(0, rb.velocity.y);
+        if(!playerBeingPushed) {
+            // if(isGrounded) {
+            if(move != 0) {
+                rb.velocity = new Vector2(move * horizontalVelocity, rb.velocity.y);
+                FlipSprite(move);  // Flip the sprite based on the direction of movement
+            } else {
+                rb.velocity = new Vector2(0, rb.velocity.y);
+            }
+            // } 
+            // else {
+            //     rb.AddForce(new Vector2(move * airControlForce, 0));
+            //     if (Mathf.Abs(rb.velocity.x) > maxAirSpeed)
+            //     {
+            //         rb.velocity = new Vector2(Mathf.Sign(rb.velocity.x) * maxAirSpeed, rb.velocity.y);
+            //     }
+            //     FlipSprite(move);
+            // }
         }
     }
 
@@ -130,23 +170,32 @@ public class PlatformPlayer : MonoBehaviour, Player
 
     void PushPlayer()
     {
+        playerBeingPushed = true;
         // Generate a random X direction (either -1 or 1) for left or right
         float choice = Random.Range(-1, 1);
-        float randomXDirection = 3;
+        float randomXDirection = 2;
         if(choice < 0)
         {
-            randomXDirection = -3;
+            randomXDirection = -2;
         }
 
         // Set the Y direction to be positive
-        float yDirection = 2.5f;
+        float yDirection = 4f;
 
-        rb.velocity = Vector2.zero;
-        rb.AddForce(new Vector2(randomXDirection, yDirection), ForceMode2D.Impulse);
+        rb.velocity = new Vector2(rb.velocity.x, 0);
+        // rb.AddForce(new Vector2(randomXDirection, yDirection), ForceMode2D.Impulse); // UNCOMMENT TO BRING BACK X FORCE
+        rb.AddForce(new Vector2(0, yDirection), ForceMode2D.Impulse);
+        
+        StartCoroutine(StopPushingPlayer());
+    }
+
+    IEnumerator StopPushingPlayer()
+    {
+        yield return new WaitForSeconds(0.2f);
+        playerBeingPushed = false;
     }
 
     public void OnSwitch() {
-        Debug.Log("we switched!");
         foreach (Transform child in platformsParent.transform)
         {
             Destroy(child.gameObject);

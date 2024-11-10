@@ -39,6 +39,7 @@ public class Fireball : MonoBehaviour
             {
                 Player player = other.GetComponent<Player>();
                 player.TakeDamage(1);
+                Destroy(gameObject);
 
             }
         } else {
