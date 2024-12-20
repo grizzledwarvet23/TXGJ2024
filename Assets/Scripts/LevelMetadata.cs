@@ -77,7 +77,9 @@ public class LevelMetadata : MonoBehaviour
             ReturnToMainMenu();
         }
 
-        if(playerAisActive && Input.GetKeyDown(KeyCode.LeftShift))
+        if(
+            // playerAisActive && 
+        Input.GetKeyDown(KeyCode.LeftShift))
         {
             Switch();
         }

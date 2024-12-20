@@ -15,7 +15,7 @@ public class AttackPlayer : MonoBehaviour, Player
     private float coyoteTimeCounter = 0;
 
     private float risingGravity = 2f;
-    private float fallingGravity = 3.5f;
+    private float fallingGravity = 3f;
 
     public LayerMask groundLayer;
     public Transform groundCheck;
@@ -171,7 +171,11 @@ public class AttackPlayer : MonoBehaviour, Player
     {
         canAttack = true;
         Transform parentTransform = platformsParent.transform;
-        StartCoroutine(ShrinkPlatformsSequentially(parentTransform));
+        foreach(Transform child in platformsParent.transform)
+        {
+            child.gameObject.GetComponent<PlayerCreatedPlatform>().SetActive(true);
+        }
+        // StartCoroutine(ShrinkPlatformsSequentially(parentTransform));
     }
 
 private IEnumerator ShrinkPlatformsSequentially(Transform parentTransform)

@@ -21,7 +21,14 @@ public class Fireball : MonoBehaviour
 
     void FixedUpdate()
     {
-        rb.velocity = transform.right * velocity;
+        // rb.velocity = transform.right * velocity;
+        rb.velocity = new Vector2(transform.right.x * velocity, rb.velocity.y);
+        // Rotate the sprite to align with the velocity direction
+        Vector2 direction = rb.velocity;
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        // Apply rotation to the sprite (but not the Rigidbody's velocity)
+        transform.rotation = Quaternion.Euler(0, 0, angle);
+
     }
     
 
@@ -49,6 +56,12 @@ public class Fireball : MonoBehaviour
                 enemy.TakeDamage(1);
                 Destroy(gameObject);
 
+            }
+            else if(other.CompareTag("Wood"))
+            {
+                Wood wood = other.GetComponent<Wood>();
+                wood.SetBurning();
+                Destroy(gameObject);
             }
         }
     }

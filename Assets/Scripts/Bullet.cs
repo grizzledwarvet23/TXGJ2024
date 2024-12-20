@@ -4,13 +4,22 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 public class Bullet : MonoBehaviour
 {
+
+    public float slowSpeed = 0.1f;
     public float speed = 8f; // Speed of the bullet
     public Rigidbody2D rb; // Rigidbody2D component
     private Vector2 direction; // Direction the bullet will move
     public bool active = false; // Controls whether the bullet moves
 
+    public AudioSource slowDownSound;
+    public AudioSource speedUpSound;
+
     void Start()
     {
+        if(!active)
+        {
+            slowDownSound.Play();
+        }
     }
 
     void Update()
@@ -22,15 +31,19 @@ public class Bullet : MonoBehaviour
         }
         else
         {
-            rb.velocity = Vector2.zero; // Keep the bullet suspended
+            rb.velocity = transform.right * slowSpeed;
         }
     }
 
     public void SetActive(bool boo)
     {
-        if(boo)
+        active = boo;
+        if(!active)
         {
-            active = true;
+            slowDownSound.Play();
+        } else if(active)
+        {
+            speedUpSound.Play();
         }
     }
 
@@ -41,7 +54,12 @@ public class Bullet : MonoBehaviour
             Destroy(gameObject); // Destroy the bullet
         }
 
-        if(hitInfo.CompareTag("FinalBoss"))
+        else if(hitInfo.CompareTag("DoorSwitch"))
+        {
+            hitInfo.gameObject.GetComponent<DoorSwitch>().ActivateDoor();
+        }
+
+        else if(hitInfo.CompareTag("FinalBoss"))
         {
             SceneManager.LoadScene("Main Menu");
         }

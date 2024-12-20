@@ -12,6 +12,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Fireball Variant
       objectReference: {fileID: 0}
+    - target: {fileID: 3190004573705751751, guid: 15273344664eae44491f750326239aa5, type: 3}
+      propertyPath: m_LinearDrag
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3190004573705751751, guid: 15273344664eae44491f750326239aa5, type: 3}
+      propertyPath: m_GravityScale
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6107703841893470652, guid: 15273344664eae44491f750326239aa5, type: 3}
       propertyPath: m_FlipX
       value: 1

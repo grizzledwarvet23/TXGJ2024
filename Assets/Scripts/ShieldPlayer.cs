@@ -22,6 +22,8 @@ public class ShieldPlayer : MonoBehaviour, Player
 
     public AudioSource ricochetSound;
 
+    private List<GameObject> bullets = new List<GameObject>();
+
     // Start is called before the first frame update
     void Start()
     {
@@ -39,6 +41,36 @@ public class ShieldPlayer : MonoBehaviour, Player
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpHeight);
         }
+
+        
+        //RedirectBullets();
+        
+    }
+
+    void RedirectBullets()
+    {
+        // if(bullets.Count > 0) {
+        //     foreach (GameObject bullet in bullets)
+        //     {
+        //         if (bullet != null)
+        //         {
+        //             // Get the Rigidbody2D component of the bullet
+        //             Rigidbody2D bulletRb = bullet.GetComponent<Rigidbody2D>();
+
+        //             // Set the bullet's rotation to match the firePoint's rotation
+        //             bullet.transform.rotation = firePoint.rotation;
+
+        //             // Optional: Redirect the bullet's velocity in the direction it is now facing
+        //             if (bulletRb != null)
+        //             {
+        //                 bulletRb.velocity = firePoint.up * bulletRb.velocity.magnitude; // Redirect with the same speed
+        //             }
+        //         }
+        //     }
+        //     ricochetSound.Play();
+        // }
+
+        
     }
 
     void AimTowardsMouse()
@@ -92,24 +124,32 @@ public class ShieldPlayer : MonoBehaviour, Player
         // Check if the collided object has the tag "Bullet"
         if (collision.CompareTag("Bullet"))
         {
+        
+            GameObject bullet = collision.gameObject;
             // Get the Rigidbody2D component of the bullet
-            Rigidbody2D bulletRb = collision.GetComponent<Rigidbody2D>();
+            Rigidbody2D bulletRb = bullet.GetComponent<Rigidbody2D>();
 
             // Set the bullet's rotation to match the firePoint's rotation
-            collision.transform.rotation = firePoint.rotation;
+            bullet.transform.rotation = firePoint.rotation;
 
             // Optional: Redirect the bullet's velocity in the direction it is now facing
             if (bulletRb != null)
             {
                 bulletRb.velocity = firePoint.up * bulletRb.velocity.magnitude; // Redirect with the same speed
             }
-
-            
-
-
-
             ricochetSound.Play();
-            
+
+
+
+            // bullets.Add(collision.gameObject);
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if(collision.CompareTag("Bullet"))
+        {
+            // bullets.Remove(collision.gameObject);
         }
     }
 }

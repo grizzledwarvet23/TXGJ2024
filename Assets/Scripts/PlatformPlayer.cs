@@ -19,7 +19,7 @@ public class PlatformPlayer : MonoBehaviour, Player
     private float maxAirSpeed = 4.2f;
 
     private float risingGravity = 2f;
-    private float fallingGravity = 3.5f;
+    private float fallingGravity = 3f;
 
 
     public LayerMask groundLayer;
@@ -45,6 +45,7 @@ public class PlatformPlayer : MonoBehaviour, Player
     public GameObject platformShadow;
 
     public GameObject platformsParent;
+    public GameObject[] platformDots;
 
     int health = 3;
 
@@ -53,6 +54,8 @@ public class PlatformPlayer : MonoBehaviour, Player
     private SpriteRenderer spriteRenderer;  // Reference to SpriteRenderer
 
     private bool playerBeingPushed = false;
+
+    
 
     void Start() {
         rb = GetComponent<Rigidbody2D>();
@@ -88,10 +91,13 @@ public class PlatformPlayer : MonoBehaviour, Player
             coyoteTimeCounter = 0;
         }
 
-        if(Input.GetMouseButtonDown(0) && canPlacePlatform && numPlatformsLeft > 0)
+        else if( (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0)) && canPlacePlatform && numPlatformsLeft > 0)
         {
             numPlatformsLeft--;
+            
             platformCounterText.text = "x " + numPlatformsLeft;
+            // so when we decrement like from 5 platforms we get to 4 platforms. ok set that index to false.
+            platformDots[numPlatformsLeft].SetActive(false);
 
             CreatePlatform();
         }
@@ -147,7 +153,8 @@ public class PlatformPlayer : MonoBehaviour, Player
     {
         animator.SetBool("CreatingPlatform", true);
         StartCoroutine(doPlatformCooldown());
-        Instantiate(tempPlatform, platformPosition.position, Quaternion.identity, platformsParent.transform);
+        GameObject platformInstance = Instantiate(tempPlatform, platformPosition.position, Quaternion.identity, platformsParent.transform);
+        platformInstance.GetComponent<PlayerCreatedPlatform>().SetActive(false);
 
         if(platformCreateSound != null) {
             platformCreateSound.Play();
@@ -180,7 +187,7 @@ public class PlatformPlayer : MonoBehaviour, Player
         }
 
         // Set the Y direction to be positive
-        float yDirection = 4f;
+        float yDirection = 14f;
 
         rb.velocity = new Vector2(rb.velocity.x, 0);
         // rb.AddForce(new Vector2(randomXDirection, yDirection), ForceMode2D.Impulse); // UNCOMMENT TO BRING BACK X FORCE
@@ -202,6 +209,10 @@ public class PlatformPlayer : MonoBehaviour, Player
         }
         canPlacePlatform = true;
         numPlatformsLeft = 5;
+        foreach(GameObject obj in platformDots)
+        {
+            obj.SetActive(true);
+        }
         platformCounterText.text = "x " + numPlatformsLeft;
     }
 

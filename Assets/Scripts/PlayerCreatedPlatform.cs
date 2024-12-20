@@ -22,6 +22,22 @@ public class PlayerCreatedPlatform : MonoBehaviour
         collider2D = GetComponent<Collider2D>();
     }
 
+    //whether to make it collidable or nah.
+    public void SetActive(bool active)
+    {
+        Start();
+        if(active)
+        {
+            collider2D.enabled = true;
+            spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, 1);
+        } 
+        else //inactive time
+        {
+            collider2D.enabled = false;
+            spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, 0.5f);
+        }
+    }
+
     private IEnumerator ShrinkAndDestroy()
     {
         Vector3 originalScale = transform.localScale;
@@ -56,11 +72,5 @@ public class PlayerCreatedPlatform : MonoBehaviour
     public void ShrinkPlatform()
     {
         StartCoroutine(ShrinkAndDestroy());
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        // Update logic can be placed here if needed
     }
 }

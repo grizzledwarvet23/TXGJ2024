@@ -12,6 +12,8 @@ public class ShooterPlayer : MonoBehaviour, Player
     public Transform groundCheck;
     public float groundCheckRadius = 0.2f;
 
+    public GameObject bulletsParent;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -26,6 +28,25 @@ public class ShooterPlayer : MonoBehaviour, Player
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpHeight);
+        }
+    }
+
+    public void OnSwitch()
+    {
+        DeactivateBullets();
+    }
+
+    void DeactivateBullets()
+    {
+        // Iterate through all child objects of bulletsParent
+        foreach (Transform child in bulletsParent.transform)
+        {
+            // Get the Bullet component
+            Bullet bullet = child.GetComponent<Bullet>();
+            if (bullet != null)
+            {
+                bullet.SetActive(false);
+            }
         }
     }
 
