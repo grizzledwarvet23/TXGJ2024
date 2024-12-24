@@ -34,6 +34,7 @@ public class AttackPlayer : MonoBehaviour, Player
     private Animator animator;
 
     int health = 3;
+    public GameObject[] healthSegments;
 
     private bool canAttack = true;
 
@@ -155,6 +156,19 @@ public class AttackPlayer : MonoBehaviour, Player
     public void TakeDamage(int d)
     {
         health -= d;
+
+        for (int i = 0; i < healthSegments.Length; i++)
+        {
+            if(i < health)
+            {
+                healthSegments[i].SetActive(true);
+            }
+            else
+            {
+                healthSegments[i].SetActive(false);
+            }
+        }
+
         if(health <= 0)
         {
             Die();
@@ -169,39 +183,62 @@ public class AttackPlayer : MonoBehaviour, Player
 
     public void OnSwitch() 
     {
+        for (int i = 0; i < healthSegments.Length; i++)
+        {
+            if(i < health)
+            {
+                healthSegments[i].SetActive(true);
+            }
+            else
+            {
+                healthSegments[i].SetActive(false);
+            }
+        }
+
+        
         canAttack = true;
         Transform parentTransform = platformsParent.transform;
         foreach(Transform child in platformsParent.transform)
         {
             child.gameObject.GetComponent<PlayerCreatedPlatform>().SetActive(true);
         }
-        // StartCoroutine(ShrinkPlatformsSequentially(parentTransform));
+        StartCoroutine(ShrinkPlatformsSequentially(parentTransform));
     }
 
 private IEnumerator ShrinkPlatformsSequentially(Transform parentTransform)
 {
-    // Loop through all children of platformsParent
-    int count = 0;
-    for (int i = 0; i < parentTransform.childCount; i++)
-    {
-        Transform platform = parentTransform.GetChild(i);
-        count++;
+    // we are gonna redesign this, basically just shrink out whatever is first in this list, if its not empty.
 
-        // Get the PlayerCreatedPlatform component from the child platform
+    if(parentTransform.childCount > 0)
+    {
+        Transform platform = parentTransform.GetChild(0);
         PlayerCreatedPlatform platformComponent = platform.GetComponent<PlayerCreatedPlatform>();
-        
-        // Assume the component exists and directly call ShrinkPlatform method
-        if (platformComponent != null)
-        {
-            platformComponent.ShrinkPlatform();
-            
-            // Wait for 2 seconds before shrinking the next platform
-            yield return new WaitForSeconds(2f);
-        }
-        else
-        {
-            Debug.LogWarning("Platform component not found on " + platform.name);
-        }
+        yield return StartCoroutine(platformComponent.ShrinkPlatform());
+        StartCoroutine(ShrinkPlatformsSequentially(parentTransform));
     }
+
+    // Loop through all children of platformsParent
+    // int count = 0;
+    // for (int i = 0; i < parentTransform.childCount; i++)
+    // {
+    //     Transform platform = parentTransform.GetChild(i);
+    //     count++;
+
+    //     // Get the PlayerCreatedPlatform component from the child platform
+    //     PlayerCreatedPlatform platformComponent = platform.GetComponent<PlayerCreatedPlatform>();
+        
+    //     // Assume the component exists and directly call ShrinkPlatform method
+    //     if (platformComponent != null)
+    //     {
+    //         platformComponent.ShrinkPlatform();
+            
+    //         // Wait for 2 seconds before shrinking the next platform
+    //         yield return new WaitForSeconds(2f);
+    //     }
+    //     else
+    //     {
+    //         Debug.LogWarning("Platform component not found on " + platform.name);
+    //     }
+    // }
 }
 }

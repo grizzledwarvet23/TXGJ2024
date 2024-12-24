@@ -48,12 +48,14 @@ public class PlatformPlayer : MonoBehaviour, Player
     public GameObject[] platformDots;
 
     int health = 3;
+    public GameObject[] healthSegments;
 
     private Animator animator;
 
     private SpriteRenderer spriteRenderer;  // Reference to SpriteRenderer
 
     private bool playerBeingPushed = false;
+
 
     
 
@@ -187,7 +189,7 @@ public class PlatformPlayer : MonoBehaviour, Player
         }
 
         // Set the Y direction to be positive
-        float yDirection = 14f;
+        float yDirection = 15f;
 
         rb.velocity = new Vector2(rb.velocity.x, 0);
         // rb.AddForce(new Vector2(randomXDirection, yDirection), ForceMode2D.Impulse); // UNCOMMENT TO BRING BACK X FORCE
@@ -203,15 +205,40 @@ public class PlatformPlayer : MonoBehaviour, Player
     }
 
     public void OnSwitch() {
+
+        for (int i = 0; i < healthSegments.Length; i++)
+        {
+            if(i < health)
+            {
+                healthSegments[i].SetActive(true);
+            }
+            else
+            {
+                healthSegments[i].SetActive(false);
+            }
+        }
+        
+        FindObjectOfType<AttackPlayer>().StopAllCoroutines();
         foreach (Transform child in platformsParent.transform)
         {
-            Destroy(child.gameObject);
+            child.GetComponent<PlayerCreatedPlatform>().StopAllCoroutines();
+            child.GetComponent<PlayerCreatedPlatform>().SetActive(false);
         }
+
+
         canPlacePlatform = true;
-        numPlatformsLeft = 5;
-        foreach(GameObject obj in platformDots)
+
+
+        numPlatformsLeft = 5 - platformsParent.transform.childCount;
+
+
+        for(int i = 0; i < numPlatformsLeft; i++)
         {
-            obj.SetActive(true);
+            platformDots[i].SetActive(true);
+        }
+        for(int i = numPlatformsLeft; i < 5; i++)
+        {
+            platformDots[i].SetActive(false);
         }
         platformCounterText.text = "x " + numPlatformsLeft;
     }
@@ -219,6 +246,19 @@ public class PlatformPlayer : MonoBehaviour, Player
     public void TakeDamage(int d)
     {
         health -= d;
+        
+        for (int i = 0; i < healthSegments.Length; i++)
+        {
+            if(i < health)
+            {
+                healthSegments[i].SetActive(true);
+            }
+            else
+            {
+                healthSegments[i].SetActive(false);
+            }
+        }
+
         if(health <= 0)
         {
             Die();

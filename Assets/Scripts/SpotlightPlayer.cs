@@ -31,11 +31,24 @@ public class SpotlightPlayer : MonoBehaviour, Player
     private Animator animator;
 
 
+    public GameObject spotLight;
+    public GameObject focusedLight;
+
+
 
     void Start() {
         rb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
+
+        // if spotlight is not found, try to see if theres a child called SpotLight and use that:
+        if(spotLight == null) {
+            spotLight = transform.Find("SpotLight").gameObject;
+        }
+        // same with focusedlight, with a child called FocusedLight:
+        if(focusedLight == null) {
+            focusedLight = transform.Find("FocusedLight").gameObject;
+        }
     }
     
 
@@ -56,6 +69,27 @@ public class SpotlightPlayer : MonoBehaviour, Player
         } else {
             animator.SetBool("moving", false);
         }
+
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            focusedLight.SetActive(true);
+            spotLight.SetActive(false);
+        }
+        else if(Input.GetMouseButtonUp(0))
+        {
+            focusedLight.SetActive(false);
+            spotLight.SetActive(true);
+        }
+
+        // if focused light is active, make sure that it is rotated towards the mouse:
+        if(focusedLight.activeSelf)
+        {
+            Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector3 direction = mousePos - transform.position;
+            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+            focusedLight.transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
+        }
     }
 
     void FixedUpdate()
@@ -65,6 +99,7 @@ public class SpotlightPlayer : MonoBehaviour, Player
             rb.velocity = new Vector2(move * horizontalVelocity, rb.velocity.y);
             FlipSprite(move);
         } else {
+            rb.velocity = new Vector2(0, rb.velocity.y);
         }
     }
 
@@ -96,6 +131,9 @@ public class SpotlightPlayer : MonoBehaviour, Player
 
         echoBG.SetActive(false);
         regularBG.SetActive(true);
+
+        spotLight.SetActive(true);
+        focusedLight.SetActive(false);
     }
 
     public void Die()

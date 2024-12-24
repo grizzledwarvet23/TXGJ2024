@@ -64,7 +64,7 @@ public class LevelMetadata : MonoBehaviour
 
         if(timerSlider != null)
         {
-            timerSlider.maxValue = 10;
+            timerSlider.maxValue = 12;
             timerSlider.value = currentTimer;
         }
     }
@@ -79,7 +79,9 @@ public class LevelMetadata : MonoBehaviour
 
         if(
             // playerAisActive && 
-        Input.GetKeyDown(KeyCode.LeftShift))
+        Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift)
+        
+        )
         {
             Switch();
         }
@@ -98,7 +100,7 @@ public class LevelMetadata : MonoBehaviour
                 timerSlider.value = currentTimer;
             }
 
-            if (playerAisActive && currentTimer >= 10 || !playerAisActive && currentTimer <= 0)
+            if (playerAisActive && currentTimer >= 12 || !playerAisActive && currentTimer <= 0)
             {
                 Switch();
             }
@@ -226,6 +228,7 @@ public class LevelMetadata : MonoBehaviour
 
         // Toggle active player status and exit switching state
         playerAisActive = !playerAisActive;
+        // yield return new WaitForSeconds(0.5f);
         isSwitching = false;
     }
 

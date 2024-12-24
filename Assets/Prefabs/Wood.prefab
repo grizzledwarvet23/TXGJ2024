@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &4386302300996860128
+--- !u!1 &3273225139240903285
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,39 +8,39 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 7864301132919178243}
-  - component: {fileID: 7851354263731853852}
-  - component: {fileID: 3193679217022955036}
-  - component: {fileID: -931685430196794891}
-  m_Layer: 6
-  m_Name: PlayerCreatedGround
-  m_TagString: Ground
+  - component: {fileID: 2846134361836839154}
+  - component: {fileID: 3409553809205162506}
+  - component: {fileID: 2586449808958769179}
+  - component: {fileID: 7670346342977103034}
+  m_Layer: 0
+  m_Name: Wood
+  m_TagString: Wood
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &7864301132919178243
+--- !u!4 &2846134361836839154
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4386302300996860128}
+  m_GameObject: {fileID: 3273225139240903285}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.92, y: -0.18, z: 0}
-  m_LocalScale: {x: 0.3, y: 0.3, z: 0.3}
+  m_LocalPosition: {x: 38.42, y: 6.44, z: 0}
+  m_LocalScale: {x: 0.18, y: 0.571414, z: 0.18}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &7851354263731853852
+--- !u!212 &3409553809205162506
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4386302300996860128}
+  m_GameObject: {fileID: 3273225139240903285}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -54,7 +54,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -75,27 +75,27 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: dba5358f8dc658040930db7c2d409c4b, type: 3}
+  m_Sprite: {fileID: 21300000, guid: dcf4fb4bcb2a3ab468547da826c0f168, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.01, y: 0.01}
+  m_Size: {x: 5.4, y: 5.4}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!61 &3193679217022955036
+--- !u!61 &2586449808958769179
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4386302300996860128}
+  m_GameObject: {fileID: 3273225139240903285}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 6200000, guid: 93195f774cec57c45895394d0b195e16, type: 2}
+  m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -118,31 +118,28 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.77399874, y: -0.7363354}
+  m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 19.2, y: 10.8}
-    newSize: {x: 0.01, y: 0.01}
+    oldSize: {x: 5.4, y: 5.4}
+    newSize: {x: 5.4, y: 5.4}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 6.1230516, y: 5.8603096}
+  m_Size: {x: 5.4, y: 5.4}
   m_EdgeRadius: 0
---- !u!114 &-931685430196794891
+--- !u!114 &7670346342977103034
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4386302300996860128}
+  m_GameObject: {fileID: 3273225139240903285}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 200bd7937a3092a41913022572d65e67, type: 3}
+  m_Script: {fileID: 11500000, guid: e209e31f4e9ea4b44bee05b6a1422616, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shrinkDuration: 3
-  targetScale: {x: 0.02, y: 0.02, z: 0.02}
-  burnedSprite: {fileID: 21300000, guid: d5cedf87f1dc26046885cd18ee835f18, type: 3}

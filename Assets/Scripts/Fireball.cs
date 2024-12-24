@@ -10,10 +10,13 @@ public class Fireball : MonoBehaviour
 
     public bool enemy;
 
+    private float originalRight;
+
 
     // Start is called before the first frame update
     void Start()
     {
+        originalRight = transform.right.x;
         rb = GetComponent<Rigidbody2D>();
         rb.velocity = transform.right * velocity;
         StartCoroutine(DieInTime(lifetime));
@@ -22,7 +25,7 @@ public class Fireball : MonoBehaviour
     void FixedUpdate()
     {
         // rb.velocity = transform.right * velocity;
-        rb.velocity = new Vector2(transform.right.x * velocity, rb.velocity.y);
+        rb.velocity = new Vector2(originalRight * velocity, rb.velocity.y);
         // Rotate the sprite to align with the velocity direction
         Vector2 direction = rb.velocity;
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
@@ -38,6 +41,14 @@ public class Fireball : MonoBehaviour
         // Check if the other collider is in the ground layer
          if (other.CompareTag("Ground"))
         {
+            // check if that thing has component called PlayerCreatedPlatform:
+            if(!enemy) {
+                PlayerCreatedPlatform platform = other.GetComponent<PlayerCreatedPlatform>();
+                if(platform != null)
+                {
+                    platform.TakeDamage(1);
+                }
+            }
             Destroy(gameObject); 
         }
         if(enemy)
