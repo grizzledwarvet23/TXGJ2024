@@ -317,6 +317,7 @@ MonoBehaviour:
   projectileSpeed: 20
   firePoint: {fileID: 7817327554784271560}
   platformsParent: {fileID: 0}
+  healthSegments: []
   attackSound: {fileID: 7270883060764566963}
 --- !u!50 &2322245680953842088
 Rigidbody2D:

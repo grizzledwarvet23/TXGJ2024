@@ -27,6 +27,12 @@ public class MainMenu : MonoBehaviour
         Debug.Log("Application Quit.");
     }
 
+    public void SelectLevelOneTutorial()
+    {
+        Debug.Log("loading scene 1 tutorial");
+        SceneManager.LoadScene("Level_1 Tutorial");
+    }
+
     public void SelectLevelOne() {
         Debug.Log("loading scene 1");
         SceneManager.LoadScene("Level_1");

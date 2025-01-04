@@ -43,9 +43,13 @@ public class LevelMetadata : MonoBehaviour
     public Slider timerSlider;
     public Image knobImage;
 
+    [System.NonSerialized]
+    public int keysCollected;
+
     // Start is called before the first frame update
     void Start()
     {
+        keysCollected = 0;
         currentTimer = playerAisActive ? 0 : timerLength;
 
         if(vcamA == null)

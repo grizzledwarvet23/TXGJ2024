@@ -47,7 +47,7 @@ public class PlatformPlayer : MonoBehaviour, Player
     public GameObject platformsParent;
     public GameObject[] platformDots;
 
-    int health = 3;
+    public int health = 1;
     public GameObject[] healthSegments;
 
     private Animator animator;
@@ -56,6 +56,9 @@ public class PlatformPlayer : MonoBehaviour, Player
 
     private bool playerBeingPushed = false;
 
+    public BoxCollider2D platformPlaceCollider;
+    private bool isPlatformPlacerCollidingWithGround = false;
+
 
     
 
@@ -63,6 +66,22 @@ public class PlatformPlayer : MonoBehaviour, Player
         rb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();  // Get the SpriteRenderer component
         animator = GetComponent<Animator>();
+    }
+
+    private void OnTriggerStay2D(Collider2D other)
+    {
+        if(((1 << other.gameObject.layer) & groundLayer) != 0)
+        {
+            isPlatformPlacerCollidingWithGround = true;
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (((1 << other.gameObject.layer) & groundLayer) != 0)
+        {
+            isPlatformPlacerCollidingWithGround = false;
+        }
     }
     
 
@@ -206,17 +225,17 @@ public class PlatformPlayer : MonoBehaviour, Player
 
     public void OnSwitch() {
 
-        for (int i = 0; i < healthSegments.Length; i++)
-        {
-            if(i < health)
-            {
-                healthSegments[i].SetActive(true);
-            }
-            else
-            {
-                healthSegments[i].SetActive(false);
-            }
-        }
+        // for (int i = 0; i < healthSegments.Length; i++)
+        // {
+        //     if(i < health)
+        //     {
+        //         healthSegments[i].SetActive(true);
+        //     }
+        //     else
+        //     {
+        //         healthSegments[i].SetActive(false);
+        //     }
+        // }
         
         FindObjectOfType<AttackPlayer>().StopAllCoroutines();
         foreach (Transform child in platformsParent.transform)
@@ -247,17 +266,17 @@ public class PlatformPlayer : MonoBehaviour, Player
     {
         health -= d;
         
-        for (int i = 0; i < healthSegments.Length; i++)
-        {
-            if(i < health)
-            {
-                healthSegments[i].SetActive(true);
-            }
-            else
-            {
-                healthSegments[i].SetActive(false);
-            }
-        }
+        // for (int i = 0; i < healthSegments.Length; i++)
+        // {
+        //     if(i < health)
+        //     {
+        //         healthSegments[i].SetActive(true);
+        //     }
+        //     else
+        //     {
+        //         healthSegments[i].SetActive(false);
+        //     }
+        // }
 
         if(health <= 0)
         {

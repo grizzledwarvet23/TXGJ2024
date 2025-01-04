@@ -207,10 +207,10 @@ public class EcholocationPlayer : MonoBehaviour, Player
         while (elapsedTime < echolocationDuration)
         {
             // Calculate the new intensity for the light based on time passed
-            float newLightScale = Mathf.Lerp(1, 37, elapsedTime / echolocationDuration);
+            float newLightScale = Mathf.Lerp(1, 41, elapsedTime / echolocationDuration);
             echolocationLightObject.transform.localScale = new Vector3(newLightScale, newLightScale, 1);
             // Calculate the scale of the black center based on time passed
-            float newBlackScale = Mathf.Lerp(0.75f, 0.95f, elapsedTime / echolocationDuration);
+            float newBlackScale = Mathf.Lerp(0.75f, 0.93f, elapsedTime / echolocationDuration);
             blackCenter.localScale = new Vector3(newBlackScale, newBlackScale, 1);
             // Increase the elapsed time
             elapsedTime += Time.deltaTime;

@@ -33,7 +33,7 @@ public class AttackPlayer : MonoBehaviour, Player
 
     private Animator animator;
 
-    int health = 3;
+    int health = 1;
     public GameObject[] healthSegments;
 
     private bool canAttack = true;
@@ -157,17 +157,17 @@ public class AttackPlayer : MonoBehaviour, Player
     {
         health -= d;
 
-        for (int i = 0; i < healthSegments.Length; i++)
-        {
-            if(i < health)
-            {
-                healthSegments[i].SetActive(true);
-            }
-            else
-            {
-                healthSegments[i].SetActive(false);
-            }
-        }
+        // for (int i = 0; i < healthSegments.Length; i++)
+        // {
+        //     if(i < health)
+        //     {
+        //         healthSegments[i].SetActive(true);
+        //     }
+        //     else
+        //     {
+        //         healthSegments[i].SetActive(false);
+        //     }
+        // }
 
         if(health <= 0)
         {
@@ -183,17 +183,17 @@ public class AttackPlayer : MonoBehaviour, Player
 
     public void OnSwitch() 
     {
-        for (int i = 0; i < healthSegments.Length; i++)
-        {
-            if(i < health)
-            {
-                healthSegments[i].SetActive(true);
-            }
-            else
-            {
-                healthSegments[i].SetActive(false);
-            }
-        }
+        // for (int i = 0; i < healthSegments.Length; i++)
+        // {
+        //     if(i < health)
+        //     {
+        //         healthSegments[i].SetActive(true);
+        //     }
+        //     else
+        //     {
+        //         healthSegments[i].SetActive(false);
+        //     }
+        // }
 
         
         canAttack = true;
