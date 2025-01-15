@@ -15,5 +15,9 @@ public interface Player
     {
         
     }
+
+    public void setPlayerBeingPushed(bool pushed) {
+        
+    }
  
 }

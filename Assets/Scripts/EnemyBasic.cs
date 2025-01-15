@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyBasic : MonoBehaviour
+public class EnemyBasic : MonoBehaviour, Enemy
 {
     // Public Variables
     public float speed = 2f; // Speed of the enemy's patrol
@@ -22,6 +22,8 @@ public class EnemyBasic : MonoBehaviour
     private Rigidbody2D rb;
 
     private int health = 2;
+
+    public AudioSource shootSound;
     
 
     // Start is called before the first frame update
@@ -96,10 +98,20 @@ public class EnemyBasic : MonoBehaviour
         firePoint.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
     }   
 
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            other.GetComponent<Player>().TakeDamage(1);
+        }
+    }
+
     void Shoot()
     {
         // Instantiate a projectile at the firePoint
         Instantiate(projectilePrefab, firePoint.position, firePoint.rotation);
+        shootSound.Play();
     }
 
     // Gizmos to visualize the detection range

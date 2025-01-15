@@ -11,6 +11,12 @@ public class LevelMetadata : MonoBehaviour
     public GameObject playerA;
     public GameObject playerB;
 
+    [System.NonSerialized] 
+    public int health = 3;
+
+    public GameObject[] healthIcons;
+    private int healthIconIndex;
+
     private bool playerAisActive = true;
 
     public TextMeshProUGUI timerText;
@@ -46,9 +52,18 @@ public class LevelMetadata : MonoBehaviour
     [System.NonSerialized]
     public int keysCollected;
 
+    public GameObject[] otherAObjects;
+    public GameObject[] otherBObjects;
+
+    
+
     // Start is called before the first frame update
     void Start()
     {
+        if(healthIcons != null)
+        {
+            healthIconIndex = healthIcons.Length - 1;
+        }
         keysCollected = 0;
         currentTimer = playerAisActive ? 0 : timerLength;
 
@@ -63,14 +78,32 @@ public class LevelMetadata : MonoBehaviour
         
         // Set the initial timer color based on the active player
         timerText.color = playerAisActive ? timerColorA : timerColorB;
-        Debug.Log(timerColorA);
-        Debug.Log(timerText.color);
 
         if(timerSlider != null)
         {
             timerSlider.maxValue = 12;
             timerSlider.value = currentTimer;
         }
+    }
+
+    public void TakeDamage(int damage)
+    {
+        health -= damage;
+        if(healthIcons != null && healthIconIndex >= 0)
+        {
+            healthIcons[healthIconIndex].SetActive(false);
+            healthIconIndex-=damage;
+        }
+        if(health <= 0)
+        {
+            Die();
+        }
+    }
+
+    public void Die()
+    {
+        Scene currentScene = SceneManager.GetActiveScene(); // Get the current scene
+        SceneManager.LoadScene(currentScene.name); // Reload the current scene
     }
 
     // Update is called once per frame
@@ -83,7 +116,8 @@ public class LevelMetadata : MonoBehaviour
 
         if(
             // playerAisActive && 
-        Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift)
+        Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift) ||
+        Input.GetKeyDown(KeyCode.JoystickButton4)
         
         )
         {
@@ -192,6 +226,20 @@ public class LevelMetadata : MonoBehaviour
                 playerB.SetActive(true);
             }
 
+            if(otherAObjects != null) {
+                foreach(GameObject obj in otherAObjects)
+                {
+                    obj.SetActive(false);
+                }
+            }
+
+            if(otherBObjects != null) {
+                foreach(GameObject obj in otherBObjects)
+                {
+                    obj.SetActive(true);
+                }
+            }
+
             // playerA.SetActive(false);
             // playerB.SetActive(true);
             playerB.GetComponent<Player>().OnSwitch();
@@ -201,9 +249,6 @@ public class LevelMetadata : MonoBehaviour
         }
         else
         {
-
-            
-
             if (playerA_UI != null) {
                 playerA_UI.SetActive(true);
             }
@@ -220,6 +265,21 @@ public class LevelMetadata : MonoBehaviour
             } else {
                 playerB.SetActive(false);
                 playerA.SetActive(true);
+            }
+
+
+            if(otherAObjects != null) {
+                foreach(GameObject obj in otherAObjects)
+                {
+                    obj.SetActive(true);
+                }
+            }
+
+            if(otherBObjects != null) {
+                foreach(GameObject obj in otherBObjects)
+                {
+                    obj.SetActive(false);
+                }
             }
 
             // playerB.SetActive(false);

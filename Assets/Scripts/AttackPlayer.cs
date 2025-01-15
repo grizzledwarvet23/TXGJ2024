@@ -38,13 +38,24 @@ public class AttackPlayer : MonoBehaviour, Player
 
     private bool canAttack = true;
 
+    private bool playerBeingPushed = false;
+
     public AudioSource attackSound;
+
+    public AudioSource jumpSound;
+
+    private bool usedControllerLastTime = true;
+
+    private Vector3 lastMousePosition;
+
+    private LevelMetadata levelMetadata;
 
     void Start() {
         canAttack = true;
         rb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
+        levelMetadata = GameObject.Find("LevelMetadata").GetComponent<LevelMetadata>();
     }
 
     void FlipSprite(float move)
@@ -74,9 +85,13 @@ public class AttackPlayer : MonoBehaviour, Player
             coyoteTimeCounter -= Time.deltaTime;
         }
 
-        if(Input.GetKeyDown(KeyCode.Space) && (isGrounded || coyoteTimeCounter > 0))
+        bool jumpButton = Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.JoystickButton0);
+        bool abilityButton = Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.JoystickButton5);
+
+        if(jumpButton && (isGrounded || coyoteTimeCounter > 0))
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpHeight);
+            jumpSound.Play();
             coyoteTimeCounter = 0;
         }
 
@@ -87,37 +102,79 @@ public class AttackPlayer : MonoBehaviour, Player
             rb.gravityScale = risingGravity;
         }
 
+        Vector2 direction = Vector2.right;
+
+        // Detect mouse aiming
+        if (Input.mousePosition != null)
+        {
+            Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            mousePosition.z = 0;
+            direction = (mousePosition - transform.position).normalized;
+        }
+
+        // Detect right stick aiming
+        float rightStickX = Input.GetAxis("RightStickHorizontal"); // Custom axis for right stick X
+        float rightStickY = -Input.GetAxis("RightStickVertical");   // Custom axis for right stick Y
 
 
-        Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        mousePosition.z = 0;
-        Vector2 direction = (mousePosition - transform.position).normalized;
-        firePoint.position = (Vector2) transform.position + direction;
+        if ( ((Input.mousePosition == lastMousePosition) && usedControllerLastTime) && Mathf.Abs(rightStickX) < 0.1f && Mathf.Abs(rightStickY) < 0.1f) // Dead zone
+        {
+            rightStickX = spriteRenderer.flipX ? -1 : 1; // Neutral horizontal movement
+            rightStickY = 0; // Neutral vertical movement
+        }
+
+        if (Mathf.Abs(rightStickX) > 0.1f || Mathf.Abs(rightStickY) > 0.1f) // Dead zone
+        {
+            direction = new Vector2(rightStickX, rightStickY).normalized;
+        }
+        
+
+        // Update firePoint position and rotation
+        firePoint.position = (Vector2)transform.position + direction;
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         firePoint.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
 
-        if(Input.GetMouseButtonDown(0) && canAttack)
+        if(abilityButton && canAttack)
         {
+            if(Input.GetKeyDown(KeyCode.JoystickButton5))
+            {
+                usedControllerLastTime = true;
+                lastMousePosition = Input.mousePosition;
+            } else {
+                usedControllerLastTime = false;
+            }
             ShootProjectile();
         }
-
-        // if(Input.GetKeyDown(KeyCode.Space))
-        // {
-        //     GameObject newProjectile = Instantiate(projectile, firePoint.position, firePoint.rotation);
-        // }
     }
 
     void FixedUpdate()
     {
         // we do movement:
         float move = Input.GetAxis("Horizontal");
-        if(move != 0) {
-            rb.velocity = new Vector2(move * horizontalVelocity, rb.velocity.y);
-            FlipSprite(move);  // Flip the sprite based on the direction of movement
-        } else {
-            rb.velocity = new Vector2(0, rb.velocity.y);
+        if(!playerBeingPushed){
+            if(move != 0) {
+                rb.velocity = new Vector2(move * horizontalVelocity, rb.velocity.y);
+                FlipSprite(move);  // Flip the sprite based on the direction of movement
+            } else {
+                rb.velocity = new Vector2(0, rb.velocity.y);
+            }
         }
 
+    }
+    
+
+    public void setPlayerBeingPushed(bool pushed) {
+        playerBeingPushed = pushed;
+        if(pushed == true)
+        {
+            StartCoroutine(StopPushingPlayer(0.3f));
+        }
+    }
+
+    IEnumerator StopPushingPlayer(float time)
+    {
+        yield return new WaitForSeconds(time);
+        playerBeingPushed = false;
     }
 
     IEnumerator SetNotAttacking()
@@ -125,9 +182,8 @@ public class AttackPlayer : MonoBehaviour, Player
         //one for animation, one for attack boolean.
         yield return new WaitForSeconds(0.25f);
         animator.SetBool("attacking", false);
-        yield return new WaitForSeconds(0.25f);
+        yield return new WaitForSeconds(0.1f);
         canAttack = true;
-        
     }
 
     void ShootProjectile()
@@ -155,8 +211,8 @@ public class AttackPlayer : MonoBehaviour, Player
 
     public void TakeDamage(int d)
     {
-        health -= d;
 
+        levelMetadata.TakeDamage(d);
         // for (int i = 0; i < healthSegments.Length; i++)
         // {
         //     if(i < health)
@@ -169,10 +225,10 @@ public class AttackPlayer : MonoBehaviour, Player
         //     }
         // }
 
-        if(health <= 0)
-        {
-            Die();
-        }
+        // if(health <= 0)
+        // {
+        //     Die();
+        // }
     }
 
     public void Die()

@@ -63,7 +63,7 @@ public class Fireball : MonoBehaviour
         } else {
             if(other.CompareTag("Enemy"))
             {
-                EnemyBasic enemy = other.GetComponent<EnemyBasic>();
+                Enemy enemy = other.GetComponent<Enemy>();
                 enemy.TakeDamage(1);
                 Destroy(gameObject);
 

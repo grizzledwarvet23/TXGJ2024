@@ -29,8 +29,6 @@ public class PlatformPlayer : MonoBehaviour, Player
     public GameObject tempPlatform;
 
     public Transform platformPosition;
-    
-    private float pushForce = 15;
 
     public float platformCooldown = 1f;
 
@@ -47,9 +45,6 @@ public class PlatformPlayer : MonoBehaviour, Player
     public GameObject platformsParent;
     public GameObject[] platformDots;
 
-    public int health = 1;
-    public GameObject[] healthSegments;
-
     private Animator animator;
 
     private SpriteRenderer spriteRenderer;  // Reference to SpriteRenderer
@@ -59,6 +54,10 @@ public class PlatformPlayer : MonoBehaviour, Player
     public BoxCollider2D platformPlaceCollider;
     private bool isPlatformPlacerCollidingWithGround = false;
 
+    public AudioSource jumpSound;
+
+    private LevelMetadata levelMetadata;
+
 
     
 
@@ -66,6 +65,7 @@ public class PlatformPlayer : MonoBehaviour, Player
         rb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();  // Get the SpriteRenderer component
         animator = GetComponent<Animator>();
+        levelMetadata = GameObject.Find("LevelMetadata").GetComponent<LevelMetadata>();
     }
 
     private void OnTriggerStay2D(Collider2D other)
@@ -106,13 +106,21 @@ public class PlatformPlayer : MonoBehaviour, Player
             rb.gravityScale = risingGravity;
         }
 
-        if(Input.GetKeyDown(KeyCode.Space) && (isGrounded || coyoteTimeCounter > 0))
+        bool jumpButton = Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.JoystickButton0);
+        bool abilityButton = Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.JoystickButton5);
+
+        if( jumpButton
+        && (isGrounded || coyoteTimeCounter > 0))
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpHeight);
+            jumpSound.Play();
             coyoteTimeCounter = 0;
         }
 
-        else if( (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0)) && canPlacePlatform && numPlatformsLeft > 0)
+        else if( (jumpButton || abilityButton)
+        
+        
+         && canPlacePlatform && numPlatformsLeft > 0)
         {
             numPlatformsLeft--;
             
@@ -132,6 +140,15 @@ public class PlatformPlayer : MonoBehaviour, Player
             platformShadow.SetActive(true);
         }
     }
+
+    public void setPlayerBeingPushed(bool pushed) {
+        playerBeingPushed = pushed;
+        if(pushed == true)
+        {
+            StartCoroutine(StopPushingPlayer(0.3f));
+        }
+    }
+
 
     void FixedUpdate()
     {
@@ -208,18 +225,18 @@ public class PlatformPlayer : MonoBehaviour, Player
         }
 
         // Set the Y direction to be positive
-        float yDirection = 15f;
+        float yDirection = 17f;
 
         rb.velocity = new Vector2(rb.velocity.x, 0);
         // rb.AddForce(new Vector2(randomXDirection, yDirection), ForceMode2D.Impulse); // UNCOMMENT TO BRING BACK X FORCE
         rb.AddForce(new Vector2(0, yDirection), ForceMode2D.Impulse);
         
-        StartCoroutine(StopPushingPlayer());
+        StartCoroutine(StopPushingPlayer(0.2f));
     }
 
-    IEnumerator StopPushingPlayer()
+    IEnumerator StopPushingPlayer(float time)
     {
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(time);
         playerBeingPushed = false;
     }
 
@@ -264,24 +281,12 @@ public class PlatformPlayer : MonoBehaviour, Player
 
     public void TakeDamage(int d)
     {
-        health -= d;
-        
-        // for (int i = 0; i < healthSegments.Length; i++)
+        levelMetadata.TakeDamage(d);
+        // health -= d;
+        // if(health <= 0)
         // {
-        //     if(i < health)
-        //     {
-        //         healthSegments[i].SetActive(true);
-        //     }
-        //     else
-        //     {
-        //         healthSegments[i].SetActive(false);
-        //     }
+        //     Die();
         // }
-
-        if(health <= 0)
-        {
-            Die();
-        }
     }
 
     public void Die()
@@ -289,4 +294,9 @@ public class PlatformPlayer : MonoBehaviour, Player
         Scene currentScene = SceneManager.GetActiveScene(); // Get the current scene
         SceneManager.LoadScene(currentScene.name); // Reload the current scene
     }
+
+
+
+
+
 }
