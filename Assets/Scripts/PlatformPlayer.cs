@@ -58,6 +58,10 @@ public class PlatformPlayer : MonoBehaviour, Player
 
     private LevelMetadata levelMetadata;
 
+    private bool isInvulnerable = false;
+    public float invulnerabilityDuration = 1f;
+    public float flashInterval = 0.2f;
+
 
     
 
@@ -141,11 +145,11 @@ public class PlatformPlayer : MonoBehaviour, Player
         }
     }
 
-    public void setPlayerBeingPushed(bool pushed) {
+    public void setPlayerBeingPushed(bool pushed, float stopInTime) {
         playerBeingPushed = pushed;
         if(pushed == true)
         {
-            StartCoroutine(StopPushingPlayer(0.3f));
+            StartCoroutine(StopPushingPlayer(stopInTime));
         }
     }
 
@@ -281,12 +285,27 @@ public class PlatformPlayer : MonoBehaviour, Player
 
     public void TakeDamage(int d)
     {
+        if(isInvulnerable) return;
+
         levelMetadata.TakeDamage(d);
-        // health -= d;
-        // if(health <= 0)
-        // {
-        //     Die();
-        // }
+        StartCoroutine(HandleInvulnerability());
+    }
+
+    private IEnumerator HandleInvulnerability()
+    {
+        isInvulnerable = true;
+
+        float elapsedTime = 0f;
+        while(elapsedTime < invulnerabilityDuration)
+        {
+            spriteRenderer.enabled = !spriteRenderer.enabled;
+
+            yield return new WaitForSeconds(flashInterval);
+
+            elapsedTime += flashInterval;
+        }
+        spriteRenderer.enabled = true;
+        isInvulnerable = false;
     }
 
     public void Die()

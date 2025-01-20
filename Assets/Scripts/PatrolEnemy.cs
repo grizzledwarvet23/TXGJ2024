@@ -41,6 +41,9 @@ public class PatrolEnemy : MonoBehaviour, Enemy
     void Flip()
     {
         movingRight = !movingRight;
+        // get component in children Pusher.cs:
+        Pusher pusher = GetComponentInChildren<Pusher>();
+        pusher.movingRight = !pusher.movingRight;
 
         Vector3 localScale = transform.localScale;
         localScale.x *= -1;

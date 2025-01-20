@@ -215,6 +215,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   shootSound: {fileID: 901912289737296267}
+  whiteFlashMat: {fileID: 2100000, guid: 7878a2efdc2ebdb4b8f3aeb6f9b5ffd7, type: 2}
 --- !u!95 &1889618932500362525
 Animator:
   serializedVersion: 5

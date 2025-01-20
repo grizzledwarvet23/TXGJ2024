@@ -49,6 +49,12 @@ public class AttackPlayer : MonoBehaviour, Player
     private Vector3 lastMousePosition;
 
     private LevelMetadata levelMetadata;
+    private bool isInvulnerable = false;
+    public float invulnerabilityDuration = 1f;
+    public float flashInterval = 0.2f;
+
+
+
 
     void Start() {
         canAttack = true;
@@ -163,11 +169,11 @@ public class AttackPlayer : MonoBehaviour, Player
     }
     
 
-    public void setPlayerBeingPushed(bool pushed) {
+    public void setPlayerBeingPushed(bool pushed, float stopInTime) {
         playerBeingPushed = pushed;
         if(pushed == true)
         {
-            StartCoroutine(StopPushingPlayer(0.3f));
+            StartCoroutine(StopPushingPlayer(stopInTime));
         }
     }
 
@@ -212,7 +218,12 @@ public class AttackPlayer : MonoBehaviour, Player
     public void TakeDamage(int d)
     {
 
+        if(isInvulnerable) return;
+
         levelMetadata.TakeDamage(d);
+        StartCoroutine(HandleInvulnerability());
+
+
         // for (int i = 0; i < healthSegments.Length; i++)
         // {
         //     if(i < health)
@@ -229,6 +240,23 @@ public class AttackPlayer : MonoBehaviour, Player
         // {
         //     Die();
         // }
+    }
+
+    private IEnumerator HandleInvulnerability()
+    {
+        isInvulnerable = true;
+
+        float elapsedTime = 0f;
+        while(elapsedTime < invulnerabilityDuration)
+        {
+            spriteRenderer.enabled = !spriteRenderer.enabled;
+
+            yield return new WaitForSeconds(flashInterval);
+
+            elapsedTime += flashInterval;
+        }
+        spriteRenderer.enabled = true;
+        isInvulnerable = false;
     }
 
     public void Die()
@@ -250,7 +278,7 @@ public class AttackPlayer : MonoBehaviour, Player
         //         healthSegments[i].SetActive(false);
         //     }
         // }
-
+        playerBeingPushed = false;
         
         canAttack = true;
         Transform parentTransform = platformsParent.transform;

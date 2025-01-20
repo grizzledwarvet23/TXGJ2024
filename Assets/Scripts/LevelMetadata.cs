@@ -116,8 +116,8 @@ public class LevelMetadata : MonoBehaviour
 
         if(
             // playerAisActive && 
-        Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift) ||
-        Input.GetKeyDown(KeyCode.JoystickButton4)
+        (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift) ||
+        Input.GetKeyDown(KeyCode.JoystickButton4)) && (!isSwitching)
         
         )
         {
@@ -154,6 +154,7 @@ public class LevelMetadata : MonoBehaviour
 
     void Switch()
     {
+        Debug.Log("HEY");
         // basically the timer goes from counting up to counting down.
         // currentTimer = 10 - currentTimer;
         StartCoroutine(SwitchCharacters());
@@ -291,8 +292,9 @@ public class LevelMetadata : MonoBehaviour
         }
 
         // Toggle active player status and exit switching state
+        
+        yield return new WaitForSeconds(0.5f);
         playerAisActive = !playerAisActive;
-        // yield return new WaitForSeconds(0.5f);
         isSwitching = false;
     }
 

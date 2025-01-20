@@ -1367,10 +1367,10 @@ MonoBehaviour:
   - {fileID: 4112224271569785870}
   - {fileID: 825076754780436455}
   - {fileID: 2281746741612835591}
-  health: 1
-  healthSegments: []
   platformPlaceCollider: {fileID: 758556311074439902}
   jumpSound: {fileID: 4616377557955679663}
+  invulnerabilityDuration: 1
+  flashInterval: 0.1
 --- !u!82 &1643955997234987196
 AudioSource:
   m_ObjectHideFlags: 0

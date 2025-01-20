@@ -16,7 +16,7 @@ public interface Player
         
     }
 
-    public void setPlayerBeingPushed(bool pushed) {
+    public void setPlayerBeingPushed(bool pushed, float stopInTime) {
         
     }
  

@@ -24,6 +24,11 @@ public class EnemyBasic : MonoBehaviour, Enemy
     private int health = 2;
 
     public AudioSource shootSound;
+
+    private SpriteRenderer spriteRenderer;
+
+    private Material originalMat;
+    public Material whiteFlashMat;
     
 
     // Start is called before the first frame update
@@ -31,6 +36,8 @@ public class EnemyBasic : MonoBehaviour, Enemy
     {
         rb = GetComponent<Rigidbody2D>();
         startingPosition = transform.position;
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        originalMat = spriteRenderer.material;
     }
 
     // Update is called once per frame
@@ -42,10 +49,22 @@ public class EnemyBasic : MonoBehaviour, Enemy
     public void TakeDamage(int d)
     {
         health -= d;
+
+        Debug.Log("Gonna flash...");
+        StartCoroutine(FlashWhite());
+
         if(health <= 0)
         {
             Destroy(gameObject);
         }
+    }
+
+    IEnumerator FlashWhite()
+    {
+        Debug.Log("Flashing white");
+        spriteRenderer.material = whiteFlashMat;
+        yield return new WaitForSeconds(0.1f); // Wait for 0.1 seconds
+        spriteRenderer.material = originalMat;
     }
 
     void Patrol()

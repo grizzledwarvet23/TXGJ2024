@@ -374,6 +374,8 @@ MonoBehaviour:
   healthSegments: []
   attackSound: {fileID: 7270883060764566963}
   jumpSound: {fileID: 7625188979131887926}
+  invulnerabilityDuration: 1
+  flashInterval: 0.1
 --- !u!50 &2322245680953842088
 Rigidbody2D:
   serializedVersion: 4

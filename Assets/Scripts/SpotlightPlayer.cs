@@ -36,6 +36,13 @@ public class SpotlightPlayer : MonoBehaviour, Player
 
 
 
+    // public AudioSource jumpSound;
+
+    private float coyoteTime = 0.2f;
+    private float coyoteTimeCounter = 0;
+
+
+
     void Start() {
         rb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -58,9 +65,24 @@ public class SpotlightPlayer : MonoBehaviour, Player
         //hey wassup    
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
 
-        if(Input.GetKeyDown(KeyCode.Space) && isGrounded)
+
+        if(isGrounded)
+        {
+            coyoteTimeCounter = coyoteTime;
+        }
+        else {
+            coyoteTimeCounter -= Time.deltaTime;
+        }
+
+        bool jumpButton = Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.JoystickButton0);
+        bool abilityButton = Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.JoystickButton5);
+        bool abilityButtonReleased = Input.GetMouseButtonUp(0) || Input.GetKeyUp(KeyCode.JoystickButton5);
+
+        if(jumpButton && (isGrounded || coyoteTimeCounter > 0))
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpHeight);
+            // jumpSound.Play();
+            coyoteTimeCounter = 0;
         }
 
         if(Input.GetAxis("Horizontal") != 0)
@@ -71,12 +93,12 @@ public class SpotlightPlayer : MonoBehaviour, Player
         }
 
 
-        if (Input.GetMouseButtonDown(0))
+        if (abilityButton)
         {
             focusedLight.SetActive(true);
             spotLight.SetActive(false);
         }
-        else if(Input.GetMouseButtonUp(0))
+        else if(abilityButtonReleased)
         {
             focusedLight.SetActive(false);
             spotLight.SetActive(true);
